@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import WorkerProfile from "../models/WorkerProfile.js";
 import EmployerProfile from "../models/EmployerProfile.js";
 import { generateRefreshToken, generateToken, verifyRefreshToken } from "../utils/jwt.js";
-import { comparePassword, hashPassword } from "../utils/password.js";
+import { comparePassword, hashPassword, validatePasswordStrength } from "../utils/password.js";
 
 const serviceError = (message, statusCode) => Object.assign(new Error(message), { statusCode });
 const sessionFor = (user) => ({
@@ -14,6 +14,8 @@ const sessionFor = (user) => ({
 export const registerUser = async ({ email, password, role, name, companyName, phone, ...profileData }) => {
   if (!email || !password || !role) throw serviceError("Email, password, and role are required.", 400);
   if (!['WORKER', 'EMPLOYER', 'ADMIN'].includes(role)) throw serviceError("Invalid user role.", 400);
+  const passwordErrors = validatePasswordStrength(password);
+  if (passwordErrors.length) throw serviceError(passwordErrors[0], 400);
   if (await User.exists({ email: email.toLowerCase() })) throw serviceError("User already exists with this email.", 409);
 
   const user = await User.create({ email, password: await hashPassword(password), role, verified: role === "ADMIN" });
