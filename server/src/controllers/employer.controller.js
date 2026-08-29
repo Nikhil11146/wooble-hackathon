@@ -39,7 +39,7 @@ export const updateEmployerProfile = async (req, res) => {
 export const getEmployerJobs = async (req, res) => {
   try {
     const { id } = req.params;
-    const jobs = await Job.find({ employerId: id }).sort({ createdAt: -1 });
+    const jobs = await Job.find({ employerId: id }).populate("requiredSkills", "name").sort({ createdAt: -1 });
     return res.status(200).json({ success: true, data: jobs });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
