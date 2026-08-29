@@ -1,25 +1,24 @@
 import { Router } from "express";
 import {
-  addCertification,
-  addSkill,
-  addWorkHistory,
+  addWorkerCertification,
+  addWorkerSkill,
+  addWorkerWorkHistory,
   applyToJob,
-  getCertifications,
   getJobById,
   getMyProfile,
   getRecommendedJobs,
-  getSkills,
   getTrustScore,
-  getWorkerApplicationsById,
-  getWorkerProfileById,
-  getWorkHistory,
-  removeSkill,
+  getWorkerApplications,
+  getWorkerCertifications,
+  getWorkerProfile,
+  getWorkerSkills,
+  getWorkerWorkHistory,
+  removeWorkerSkill,
   searchJobs,
-  updateSkill,
-  updateWorkerProfileById,
+  updateWorkerProfile,
+  updateWorkerSkill,
 } from "../controllers/worker.controller.js";
 import { authenticate } from "../middleware/auth.middleware.js";
-import { ownWorkerProfile } from "../middleware/ownership.middleware.js";
 import { authorize } from "../middleware/role.middleware.js";
 import { validateRequiredFields } from "../middleware/validation.middleware.js";
 
@@ -27,25 +26,23 @@ const router = Router();
 export const jobRouter = Router();
 export const applicationRouter = Router();
 
-const ownWorker = [authenticate, authorize("WORKER"), ownWorkerProfile];
-
 router.get("/me", authenticate, authorize("WORKER"), getMyProfile);
-router.get("/:id", getWorkerProfileById);
-router.get("/:id/profile", getWorkerProfileById);
-router.put("/:id", ...ownWorker, updateWorkerProfileById);
-router.put("/:id/profile", ...ownWorker, updateWorkerProfileById);
+router.get("/:id", getWorkerProfile);
+router.get("/:id/profile", getWorkerProfile);
+router.put("/:id", authenticate, authorize("WORKER"), updateWorkerProfile);
+router.put("/:id/profile", authenticate, authorize("WORKER"), updateWorkerProfile);
 
-router.get("/:id/skills", getSkills);
-router.post("/:id/skills", ...ownWorker, validateRequiredFields(["name"]), addSkill);
-router.put("/:id/skills/:skillId", ...ownWorker, updateSkill);
-router.delete("/:id/skills/:skillId", ...ownWorker, removeSkill);
+router.get("/:id/skills", getWorkerSkills);
+router.post("/:id/skills", authenticate, authorize("WORKER"), validateRequiredFields(["name"]), addWorkerSkill);
+router.put("/:id/skills/:skillId", authenticate, authorize("WORKER"), updateWorkerSkill);
+router.delete("/:id/skills/:skillId", authenticate, authorize("WORKER"), removeWorkerSkill);
 
-router.get("/:id/certifications", getCertifications);
-router.post("/:id/certifications", ...ownWorker, validateRequiredFields(["name", "issuer"]), addCertification);
-router.get("/:id/work-history", getWorkHistory);
-router.post("/:id/work-history", ...ownWorker, addWorkHistory);
+router.get("/:id/certifications", getWorkerCertifications);
+router.post("/:id/certifications", authenticate, authorize("WORKER"), validateRequiredFields(["name", "issuer"]), addWorkerCertification);
+router.get("/:id/work-history", getWorkerWorkHistory);
+router.post("/:id/work-history", authenticate, authorize("WORKER"), addWorkerWorkHistory);
 router.get("/:id/trust-score", getTrustScore);
-router.get("/:id/applications", authenticate, authorize("WORKER", "ADMIN"), ownWorkerProfile, getWorkerApplicationsById);
+router.get("/:id/applications", authenticate, authorize("WORKER", "ADMIN"), getWorkerApplications);
 
 jobRouter.get("/recommended", authenticate, authorize("WORKER"), getRecommendedJobs);
 jobRouter.get("/search", searchJobs);

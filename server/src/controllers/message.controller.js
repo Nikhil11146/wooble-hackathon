@@ -1,36 +1,63 @@
-import { getConversation, getInbox, markConversationRead, sendMessage } from "../services/message.service.js";
+import {
+  getConversations as findConversations,
+  getMessages as findMessages,
+  markThreadRead as updateThreadRead,
+  sendMessage as createMessage,
+} from "../services/message.service.js";
+import { emitToUser } from "../sockets/socket.server.js";
 
-const sendError = (res, error) => res.status(error.statusCode || 500).json({ success: false, message: error.message });
+const sendServiceError = (res, error) =>
+  res.status(error.statusCode || 500).json({ success: false, message: error.message || "Internal server error." });
+
+// GET /api/messages/conversations
+export const listConversations = async (req, res) => {
+  try {
+    const data = await findConversations(req.user.id);
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return sendServiceError(res, error);
+  }
+};
+
+// GET /api/messages/:otherUserId
+export const listMessages = async (req, res) => {
+  try {
+    const data = await findMessages(req.user.id, req.params.otherUserId);
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return sendServiceError(res, error);
+  }
+};
 
 // POST /api/messages
-export const createMessage = async (req, res) => {
+export const send = async (req, res) => {
   try {
-    const message = await sendMessage(req.body, req.user.id);
-    return res.status(201).json({ success: true, message: "Message sent successfully.", data: message });
-  } catch (error) { return sendError(res, error); }
+    const data = await createMessage(req.user.id, req.body);
+
+    // Push the new message to both sides of the conversation in real time.
+    const payload = data.toObject();
+    emitToUser(req.user.id, "message:new", payload);
+    emitToUser(data.recipientId, "message:new", payload);
+
+    return res.status(201).json({ success: true, message: "Message sent.", data });
+  } catch (error) {
+    return sendServiceError(res, error);
+  }
 };
 
-// GET /api/messages
-export const getMyInbox = async (req, res) => {
-  try {
-    const inbox = await getInbox(req.user.id);
-    return res.status(200).json({ success: true, data: inbox });
-  } catch (error) { return sendError(res, error); }
-};
-
-// GET /api/messages/with/:userId
-export const getConversationWith = async (req, res) => {
-  try {
-    const { limit } = req.query;
-    const messages = await getConversation(req.user.id, req.params.userId, { limit });
-    return res.status(200).json({ success: true, data: messages });
-  } catch (error) { return sendError(res, error); }
-};
-
-// PUT /api/messages/with/:userId/read
+// POST /api/messages/:otherUserId/read
 export const markRead = async (req, res) => {
   try {
-    await markConversationRead(req.user.id, req.params.userId);
-    return res.status(200).json({ success: true, message: "Conversation marked as read." });
-  } catch (error) { return sendError(res, error); }
+    await updateThreadRead(req.user.id, req.params.otherUserId);
+
+    // Let the sender know their messages were seen.
+    emitToUser(req.params.otherUserId, "message:read", {
+      threadId: req.user.id,
+      by: req.user.id,
+    });
+
+    return res.status(200).json({ success: true, data: null });
+  } catch (error) {
+    return sendServiceError(res, error);
+  }
 };

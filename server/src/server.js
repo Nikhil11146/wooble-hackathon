@@ -6,8 +6,10 @@ import { API_PREFIX, APP_NAME, DATABASE_STATES, REQUEST_BODY_LIMIT } from "./con
 import { connectDatabase, getDatabaseState } from "./config/database.js";
 import { ENV } from "./config/env.js";
 import { errorHandler, notFound } from "./middleware/error.middleware.js";
-import { requestLogger } from "./middleware/requestLogger.middleware.js";
+import { apiLimiter } from "./middleware/rate-limit.middleware.js";
+import "./models/index.js";
 import apiRoutes from "./routes/index.js";
+import { setupSocketServer } from "./sockets/socket.server.js";
 
 const app = express();
 const allowedOrigins = ENV.CORS_ORIGIN.split(",").map((origin) => origin.trim()).filter(Boolean);
@@ -22,7 +24,6 @@ app.use(cors({
 }));
 app.use(express.json({ limit: REQUEST_BODY_LIMIT }));
 app.use(express.urlencoded({ extended: true, limit: REQUEST_BODY_LIMIT }));
-app.use(requestLogger);
 
 app.get("/", (_req, res) => {
   res.status(200).json({
@@ -38,6 +39,7 @@ app.get("/health", (_req, res) => {
   });
 });
 
+app.use(API_PREFIX, apiLimiter);
 app.use(API_PREFIX, apiRoutes);
 app.use(notFound);
 app.use(errorHandler);
@@ -47,9 +49,12 @@ export const startServer = async () => {
     await connectDatabase();
     console.log("Database connected.");
 
-    return app.listen(ENV.PORT, () => {
+    const server = app.listen(ENV.PORT, () => {
       console.log(`Server listening on port ${ENV.PORT}.`);
     });
+
+    setupSocketServer(server);
+    return server;
   } catch (error) {
     console.error("Unable to start server:", error.message);
     process.exitCode = 1;
