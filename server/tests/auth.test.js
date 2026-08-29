@@ -93,6 +93,51 @@ describe("Authentication", () => {
     assert.ok(Array.isArray(res.body.errors));
   });
 
+  it("rejects an invalid phone number on registration", async () => {
+    const res = await api.post("/api/auth/register").send({
+      email: uniqueEmail("badphone"),
+      password: "StrongPass1!",
+      role: "WORKER",
+      phone: "$#/bad-phone!",
+    });
+    assert.equal(res.status, 400);
+    assert.equal(res.body.success, false);
+    assert.ok(res.body.errors.some((error) => error.field === "phone"));
+  });
+
+  it("rejects a phone number starting with 0 or shorter than 10 digits", async () => {
+    for (const phone of ["0123456789", "12345"]) {
+      const res = await api.post("/api/auth/register").send({
+        email: uniqueEmail("badphone"),
+        password: "StrongPass1!",
+        role: "WORKER",
+        phone,
+      });
+      assert.equal(res.status, 400, `expected 400 for ${phone}`);
+    }
+  });
+
+  it("accepts a formatted valid phone number on registration", async () => {
+    const res = await api.post("/api/auth/register").send({
+      email: uniqueEmail("goodphone"),
+      password: "StrongPass1!",
+      role: "WORKER",
+      phone: "+91 98765 43210",
+    });
+    assert.equal(res.status, 201);
+    assert.equal(res.body.data.profile.phone, "+91 98765 43210");
+  });
+
+  it("allows registration without a phone number", async () => {
+    const res = await api.post("/api/auth/register").send({
+      email: uniqueEmail("nophone"),
+      password: "StrongPass1!",
+      role: "EMPLOYER",
+      companyName: "No Phone Co",
+    });
+    assert.equal(res.status, 201);
+  });
+
   it("rate limits authentication routes", async () => {
     const email = uniqueEmail("ratelimit");
     for (let i = 0; i < 5; i += 1) {

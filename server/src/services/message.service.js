@@ -83,6 +83,7 @@ export const getConversations = async (userId) => {
 
 export const getMessages = async (userId, otherUserId) => {
   if (!otherUserId) throw serviceError("Conversation partner is required.", 400);
+  if (!mongoose.isValidObjectId(otherUserId)) throw serviceError("Invalid conversation partner.", 400);
   return Message.find({
     $or: [
       { senderId: userId, recipientId: otherUserId },
@@ -122,3 +123,39 @@ export const sendMessage = async (userId, { recipientId, jobId, content }) => {
 
 export const markThreadRead = (userId, otherUserId) =>
   Message.updateMany({ senderId: otherUserId, recipientId: userId, read: false }, { read: true, readAt: new Date() });
+
+export const searchRecipients = async (userId, query) => {
+  const term = String(query || "").trim().toLowerCase();
+  const current = await User.findById(userId);
+  if (!current) throw serviceError("User not found.", 404);
+
+  const oppositeRole = current.role === "WORKER" ? "EMPLOYER" : "WORKER";
+  const profiles = oppositeRole === "WORKER" ? await WorkerProfile.find() : await EmployerProfile.find();
+  const nameByUserId = new Map(
+    profiles.map((profile) => [
+      String(profile.userId),
+      (oppositeRole === "WORKER" ? profile.name : profile.companyName) || null,
+    ]),
+  );
+
+  const users = await User.find({ _id: { $in: [...nameByUserId.keys()] }, role: oppositeRole });
+
+  return users
+    .map((user) => {
+      const name = nameByUserId.get(String(user._id));
+      return {
+        id: user._id,
+        name: name || user.email,
+        email: user.email,
+        role: user.role,
+      };
+    })
+    .filter(
+      (recipient) =>
+        !term ||
+        recipient.name.toLowerCase().includes(term) ||
+        recipient.email.toLowerCase().includes(term),
+    )
+    .sort((left, right) => left.name.localeCompare(right.name))
+    .slice(0, 25);
+};
