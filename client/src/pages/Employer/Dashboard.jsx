@@ -61,7 +61,7 @@ export default function EmployerDashboard({ onNavigate }) {
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <section>
           <div className="mb-3 flex items-center justify-between gap-3">
-            <h2 className="text-lg font-bold text-slate-950">Recent jobs</h2>
+            <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Recent jobs</h2>
             <Button variant="ghost" className="min-h-10 px-3" onClick={() => onNavigate?.("/employer/jobs/new")}>
               Manage
             </Button>
@@ -73,7 +73,7 @@ export default function EmployerDashboard({ onNavigate }) {
               {recentJobs.length > 0 ? (
                 recentJobs.map((job) => <JobCard key={job._id} job={job} />)
               ) : (
-                <div className="rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm">
+                <div className="rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur dark:text-[#aebac1]">
                   No jobs posted yet.
                 </div>
               )}
@@ -81,8 +81,8 @@ export default function EmployerDashboard({ onNavigate }) {
           )}
         </section>
 
-        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-950">Company profile</h2>
+        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+          <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Company profile</h2>
           <div className="mt-4 grid gap-3">
             {notice && <Notice type="success">{notice}</Notice>}
             {error && <Notice type="error">{error}</Notice>}

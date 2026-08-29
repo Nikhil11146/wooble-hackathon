@@ -112,7 +112,7 @@ export default function WorkerProfile() {
       />
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
           {status && <Notice type="success">{status}</Notice>}
           {error && <Notice type="error">{error}</Notice>}
           <div className={status || error ? "mt-4" : ""}>
@@ -120,39 +120,39 @@ export default function WorkerProfile() {
           </div>
         </section>
 
-        <aside className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-950">Preview</h2>
+        <aside className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+          <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Preview</h2>
           <div className="mt-4">
             <TrustScore score={profile?.kaushalTrustScore} breakdown={profile?.trustScoreBreakdown} />
           </div>
           <dl className="mt-5 grid gap-3 text-sm">
             <div>
-              <dt className="font-semibold text-slate-700">Name</dt>
-              <dd className="text-slate-600">{profile?.name || "Not set"}</dd>
+              <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Name</dt>
+              <dd className="text-slate-600 dark:text-[#aebac1]">{profile?.name || "Not set"}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-slate-700">Occupation</dt>
-              <dd className="text-slate-600">{profile?.primaryOccupation || "Not set"}</dd>
+              <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Occupation</dt>
+              <dd className="text-slate-600 dark:text-[#aebac1]">{profile?.primaryOccupation || "Not set"}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-slate-700">Expected salary</dt>
-              <dd className="text-slate-600">{formatSalary(profile?.expectedSalary)}</dd>
+              <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Expected salary</dt>
+              <dd className="text-slate-600 dark:text-[#aebac1]">{formatSalary(profile?.expectedSalary)}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-slate-700">Availability</dt>
-              <dd className="text-slate-600">{AVAILABILITY_LABELS[profile?.availability] || "Not set"}</dd>
+              <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Availability</dt>
+              <dd className="text-slate-600 dark:text-[#aebac1]">{AVAILABILITY_LABELS[profile?.availability] || "Not set"}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-slate-700">Contact</dt>
-              <dd className="text-slate-600">{profile?.phone || user?.email || "Not set"}</dd>
+              <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Contact</dt>
+              <dd className="text-slate-600 dark:text-[#aebac1]">{profile?.phone || user?.email || "Not set"}</dd>
             </div>
           </dl>
         </aside>
       </div>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-2">
-        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-950">Work history</h2>
+        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+          <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Work history</h2>
           <form onSubmit={saveWork} className="mt-4 grid gap-3">
             <Input
               label="Company"
@@ -186,7 +186,7 @@ export default function WorkerProfile() {
                 disabled={workForm.currentlyWorking}
               />
             </div>
-            <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+            <label className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-[#aebac1]">
               <input
                 type="checkbox"
                 checked={workForm.currentlyWorking}
@@ -207,10 +207,10 @@ export default function WorkerProfile() {
             {!history.loading && !history.error && workList.length > 0 && (
               <div className="grid gap-3">
                 {workList.map((item) => (
-                  <article key={item._id || `${item.companyName}-${item.role}`} className="rounded-lg bg-slate-50 p-3 text-sm">
-                    <p className="font-semibold text-slate-950">{item.role || "Role"}</p>
-                    <p className="text-slate-600">{item.companyName}</p>
-                    <p className="mt-1 text-xs text-slate-500">
+                  <article key={item._id || `${item.companyName}-${item.role}`} className="rounded-lg bg-slate-50 p-3 text-sm dark:bg-[#2a3942]">
+                    <p className="font-semibold text-slate-950 dark:text-[#e9edef]">{item.role || "Role"}</p>
+                    <p className="text-slate-600 dark:text-[#aebac1]">{item.companyName}</p>
+                    <p className="mt-1 text-xs text-slate-500 dark:text-[#8696a0]">
                       {formatDate(item.startDate)} - {item.currentlyWorking ? "Present" : formatDate(item.endDate)}
                     </p>
                   </article>
@@ -220,8 +220,8 @@ export default function WorkerProfile() {
           </div>
         </section>
 
-        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-950">Certifications</h2>
+        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+          <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Certifications</h2>
           <form onSubmit={saveCertification} className="mt-4 grid gap-3">
             <Input
               label="Certificate name"
@@ -262,10 +262,10 @@ export default function WorkerProfile() {
             {!certifications.loading && !certifications.error && certList.length > 0 && (
               <div className="grid gap-3">
                 {certList.map((item) => (
-                  <article key={item._id || item.name} className="rounded-lg bg-slate-50 p-3 text-sm">
-                    <p className="font-semibold text-slate-950">{item.name}</p>
-                    <p className="text-slate-600">{item.issuer}</p>
-                    <p className="mt-1 text-xs text-slate-500">
+                  <article key={item._id || item.name} className="rounded-lg bg-slate-50 p-3 text-sm dark:bg-[#2a3942]">
+                    <p className="font-semibold text-slate-950 dark:text-[#e9edef]">{item.name}</p>
+                    <p className="text-slate-600 dark:text-[#aebac1]">{item.issuer}</p>
+                    <p className="mt-1 text-xs text-slate-500 dark:text-[#8696a0]">
                       {formatDate(item.issueDate)} {item.expiryDate ? `- expires ${formatDate(item.expiryDate)}` : ""}
                     </p>
                   </article>

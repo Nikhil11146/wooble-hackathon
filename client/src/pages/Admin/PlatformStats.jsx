@@ -40,9 +40,9 @@ export default function AdminPlatformStats() {
         </div>
       )}
 
-      <section className="mt-6 rounded-lg border border-slate-200 bg-white shadow-sm">
-        <header className="border-b border-slate-100 p-4">
-          <h2 className="text-lg font-bold text-slate-950">Workers</h2>
+      <section className="mt-6 rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+        <header className="border-b border-slate-100 p-4 dark:border-[#222d34]">
+          <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Workers</h2>
         </header>
         {workers.loading && <div className="p-4"><LoadingState label="Loading workers..." /></div>}
         {workers.error && <div className="p-4"><ErrorState error={workers.error} onRetry={workers.refetch} /></div>}
@@ -51,8 +51,8 @@ export default function AdminPlatformStats() {
         )}
         {!workers.loading && !workers.error && asList(workers.data).length > 0 && (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-              <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <table className="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-slate-700">
+              <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:bg-[#2a3942] dark:text-[#8696a0]">
                 <tr>
                   <th className="px-4 py-3">Worker</th>
                   <th className="px-4 py-3">Occupation</th>
@@ -61,19 +61,19 @@ export default function AdminPlatformStats() {
                   <th className="px-4 py-3">Created</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                 {asList(workers.data).slice(0, 8).map((worker) => (
                   <tr key={worker._id}>
                     <td className="px-4 py-3">
-                      <p className="font-semibold text-slate-950">{worker.name}</p>
-                      <p className="text-xs text-slate-500">{worker.userId?.email}</p>
+                      <p className="font-semibold text-slate-950 dark:text-[#e9edef]">{worker.name}</p>
+                      <p className="text-xs text-slate-500 dark:text-[#8696a0]">{worker.userId?.email}</p>
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{worker.primaryOccupation || "Not set"}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-[#aebac1]">{worker.primaryOccupation || "Not set"}</td>
                     <td className="px-4 py-3">
                       <TrustScore score={worker.kaushalTrustScore} size={42} showLabel={false} />
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{worker.yearsOfExperience || 0} years</td>
-                    <td className="px-4 py-3 text-slate-600">{formatDate(worker.createdAt)}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-[#aebac1]">{worker.yearsOfExperience || 0} years</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-[#aebac1]">{formatDate(worker.createdAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -83,21 +83,21 @@ export default function AdminPlatformStats() {
       </section>
 
       <div className="mt-6 grid gap-6 xl:grid-cols-2">
-        <section className="rounded-lg border border-slate-200 bg-white shadow-sm">
-          <header className="border-b border-slate-100 p-4">
-            <h2 className="text-lg font-bold text-slate-950">Employers</h2>
+        <section className="rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+          <header className="border-b border-slate-100 p-4 dark:border-[#222d34]">
+            <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Employers</h2>
           </header>
           {employers.loading && <div className="p-4"><LoadingState label="Loading employers..." /></div>}
           {employers.error && <div className="p-4"><ErrorState error={employers.error} onRetry={employers.refetch} /></div>}
           {!employers.loading && !employers.error && (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-slate-100 dark:divide-slate-700">
               {asList(employers.data).slice(0, 8).map((employer) => (
                 <div key={employer._id} className="flex flex-wrap items-center justify-between gap-3 p-4">
                   <div>
-                    <p className="font-semibold text-slate-950">{employer.companyName}</p>
-                    <p className="text-sm text-slate-500">{employer.userId?.email || employer.industry || "Employer"}</p>
+                    <p className="font-semibold text-slate-950 dark:text-[#e9edef]">{employer.companyName}</p>
+                    <p className="text-sm text-slate-500 dark:text-[#8696a0]">{employer.userId?.email || employer.industry || "Employer"}</p>
                   </div>
-                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700">
+                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 dark:bg-[#2a3942] dark:text-[#aebac1]">
                     {employer.verified ? "Verified" : "Pending"}
                   </span>
                 </div>
@@ -107,23 +107,23 @@ export default function AdminPlatformStats() {
           )}
         </section>
 
-        <section className="rounded-lg border border-slate-200 bg-white shadow-sm">
-          <header className="border-b border-slate-100 p-4">
-            <h2 className="text-lg font-bold text-slate-950">Jobs</h2>
+        <section className="rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+          <header className="border-b border-slate-100 p-4 dark:border-[#222d34]">
+            <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Jobs</h2>
           </header>
           {jobs.loading && <div className="p-4"><LoadingState label="Loading jobs..." /></div>}
           {jobs.error && <div className="p-4"><ErrorState error={jobs.error} onRetry={jobs.refetch} /></div>}
           {!jobs.loading && !jobs.error && (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-slate-100 dark:divide-slate-700">
               {asList(jobs.data).slice(0, 8).map((job) => (
                 <div key={job._id} className="p-4">
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <p className="font-semibold text-slate-950">{job.title}</p>
-                    <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                    <p className="font-semibold text-slate-950 dark:text-[#e9edef]">{job.title}</p>
+                    <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 dark:bg-[#00a884]/15 dark:text-[#00a884]">
                       {formatStatus(job.status)}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-slate-500">{job.category || "General"} - {formatSalary(job.salary)}</p>
+                  <p className="mt-1 text-sm text-slate-500 dark:text-[#8696a0]">{job.category || "General"} - {formatSalary(job.salary)}</p>
                 </div>
               ))}
               {asList(jobs.data).length === 0 && <div className="p-4"><EmptyState title="No jobs" /></div>}

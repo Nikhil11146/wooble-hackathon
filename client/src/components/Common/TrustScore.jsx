@@ -33,7 +33,7 @@ export default function TrustScore({
           }}
         >
           <div
-            className="flex items-center justify-center rounded-full bg-white font-bold text-slate-900"
+            className="flex items-center justify-center rounded-full bg-white font-bold text-slate-900 dark:bg-[#202c33] dark:text-[#e9edef]"
             style={{ width: innerSize, height: innerSize, fontSize: size * 0.24 }}
           >
             {safeScore}
@@ -41,22 +41,22 @@ export default function TrustScore({
         </div>
         {showLabel && (
           <div>
-            <p className={`text-lg font-bold ${trustScoreColour(safeScore)}`}>Trust score</p>
-            <p className="text-sm text-slate-500">Kaushal verified profile strength</p>
+            <p className={`text-lg font-bold tracking-tight ${trustScoreColour(safeScore)}`}>Trust score</p>
+            <p className="text-[15px] text-slate-500 dark:text-[#8696a0]">Kaushal verified profile strength</p>
           </div>
         )}
       </div>
 
       {breakdown && (
-        <ul className="grid gap-2 rounded-lg bg-slate-50 p-3 text-sm">
+        <ul className="grid gap-2 rounded-lg bg-slate-50 p-3 text-sm dark:bg-[#2a3942]">
           {TRUST_SCORE_FACTORS.map(({ key, label, max }) => {
             const value = breakdown[key] ?? 0;
             return (
               <li key={key} className="flex items-center justify-between gap-3">
-                <span className="text-slate-600">{label}</span>
-                <span className="font-semibold text-slate-900">
+                <span className="text-slate-600 dark:text-[#aebac1]">{label}</span>
+                <span className="font-semibold text-slate-900 dark:text-[#e9edef]">
                   +{value}
-                  <span className="font-normal text-slate-400"> / {max}</span>
+                  <span className="font-normal text-slate-400 dark:text-[#8696a0]"> / {max}</span>
                 </span>
               </li>
             );

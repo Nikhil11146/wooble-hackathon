@@ -1,13 +1,13 @@
 import Messenger from "../../components/Messages/Messenger";
 import { PageHeader } from "../../components/Common/PageState";
 
-export default function WorkerMessages() {
+export default function EmployerMessages() {
   return (
     <>
       <PageHeader
-        eyebrow="Worker portal"
+        eyebrow="Employer portal"
         title="Messages"
-        description="Chat with employers about jobs, interviews, and offers."
+        description="Chat with workers about applications, interviews, and offers."
       />
       <Messenger />
     </>

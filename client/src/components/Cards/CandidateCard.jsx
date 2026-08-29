@@ -16,28 +16,28 @@ export default function CandidateCard({
   const rating = formatRating(candidate.averageRating);
 
   return (
-    <article className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+    <article className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h3 className="text-lg font-semibold text-slate-900">{candidate.name || "Unnamed worker"}</h3>
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-[#e9edef]">{candidate.name || "Unnamed worker"}</h3>
             {matchScore != null && (
-              <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-bold text-green-700">
+              <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-bold text-green-700 dark:bg-[#00a884]/15 dark:text-[#25d366]">
                 {matchScore}% match
               </span>
             )}
           </div>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-500 dark:text-[#8696a0]">
             {candidate.primaryOccupation || "Worker"} - {candidate.yearsOfExperience || 0} years experience
             {rating && ` - ${rating}`}
           </p>
           {candidate.availability && (
-            <p className="mt-1 text-sm font-medium text-emerald-700">
+            <p className="mt-1 text-sm font-medium text-emerald-700 dark:text-[#25d366]">
               {AVAILABILITY_LABELS[candidate.availability] || candidate.availability}
             </p>
           )}
-          {distance && <p className="mt-1 text-sm text-slate-500">{distance}</p>}
-          <p className="mt-2 text-sm text-slate-700">
+          {distance && <p className="mt-1 text-sm text-slate-500 dark:text-[#8696a0]">{distance}</p>}
+          <p className="mt-2 text-sm text-slate-700 dark:text-[#aebac1]">
             {skills.map((skill) => (typeof skill === "string" ? skill : skill.name)).filter(Boolean).join(", ") || "No skills added"}
           </p>
         </div>
@@ -45,10 +45,10 @@ export default function CandidateCard({
       </div>
 
       {matchReasons.length > 0 && (
-        <ul className="mt-4 grid gap-1.5 rounded-lg bg-slate-50 p-3 text-sm text-slate-700">
+        <ul className="mt-4 grid gap-1.5 rounded-lg bg-slate-50 p-3 text-sm text-slate-700 dark:bg-[#2a3942] dark:text-[#aebac1]">
           {matchReasons.map((reason) => (
             <li key={reason} className="flex items-start gap-2">
-              <span className="font-bold text-green-600">OK</span>
+              <span className="font-bold text-green-600 dark:text-[#25d366]">OK</span>
               <span>{reason}</span>
             </li>
           ))}

@@ -58,8 +58,8 @@ export default function EmployerPostJob() {
       />
 
       <div className="grid gap-6 lg:grid-cols-[420px_minmax(0,1fr)]">
-        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-950">New job</h2>
+        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+          <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">New job</h2>
           <div className="mt-4">
             <JobForm key={formKey} onSubmit={postJob} submitting={saving} />
           </div>
@@ -78,8 +78,8 @@ export default function EmployerPostJob() {
                 jobList.map((job) => (
                   <div key={job._id} className="grid gap-2">
                     <JobCard job={job} />
-                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm">
-                      <span className="text-slate-500">Posted {formatDate(job.createdAt)}</span>
+                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+                      <span className="text-slate-500 dark:text-[#8696a0]">Posted {formatDate(job.createdAt)}</span>
                       <Button variant="secondary" className="min-h-10 px-3" disabled={job.status === "CLOSED"} onClick={() => closeJob(job)}>
                         {job.status === "CLOSED" ? "Closed" : "Close job"}
                       </Button>

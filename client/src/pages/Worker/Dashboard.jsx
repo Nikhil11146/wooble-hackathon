@@ -46,23 +46,23 @@ export default function WorkerDashboard({ onNavigate }) {
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
-        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-950">Profile strength</h2>
+        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25">
+          <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Profile strength</h2>
           <div className="mt-4">
             <TrustScore score={score} breakdown={breakdown} />
           </div>
           <dl className="mt-5 grid gap-3 text-sm">
             <div>
-              <dt className="font-semibold text-slate-700">Occupation</dt>
-              <dd className="text-slate-600">{profile?.primaryOccupation || "Add occupation"}</dd>
+              <dt className="font-semibold text-slate-700 dark:text-slate-300">Occupation</dt>
+              <dd className="text-slate-600 dark:text-slate-400">{profile?.primaryOccupation || "Add occupation"}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-slate-700">Experience</dt>
-              <dd className="text-slate-600">{profile?.yearsOfExperience || 0} years</dd>
+              <dt className="font-semibold text-slate-700 dark:text-slate-300">Experience</dt>
+              <dd className="text-slate-600 dark:text-slate-400">{profile?.yearsOfExperience || 0} years</dd>
             </div>
             <div>
-              <dt className="font-semibold text-slate-700">Languages</dt>
-              <dd className="text-slate-600">{profile?.languages?.join(", ") || "Add languages"}</dd>
+              <dt className="font-semibold text-slate-700 dark:text-slate-300">Languages</dt>
+              <dd className="text-slate-600 dark:text-slate-400">{profile?.languages?.join(", ") || "Add languages"}</dd>
             </div>
           </dl>
           <Button variant="secondary" className="mt-5 w-full" onClick={() => onNavigate?.("/worker/profile")}>
@@ -72,7 +72,7 @@ export default function WorkerDashboard({ onNavigate }) {
 
         <section>
           <div className="mb-3 flex items-center justify-between gap-3">
-            <h2 className="text-lg font-bold text-slate-950">Recommended jobs</h2>
+            <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Recommended jobs</h2>
             <Button variant="ghost" className="min-h-10 px-3" onClick={() => onNavigate?.("/worker/jobs")}>
               View all
             </Button>
@@ -84,7 +84,7 @@ export default function WorkerDashboard({ onNavigate }) {
               {recommendedJobs.length > 0 ? (
                 recommendedJobs.map((job) => <JobCard key={job._id} job={job} onView={() => onNavigate?.("/worker/jobs")} />)
               ) : (
-                <div className="rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm">
+                <div className="rounded-lg border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:text-[#aebac1] dark:shadow-black/25">
                   No recommended jobs yet. Try search from the jobs page.
                 </div>
               )}
@@ -93,9 +93,9 @@ export default function WorkerDashboard({ onNavigate }) {
         </section>
       </div>
 
-      <section className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+      <section className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-lg font-bold text-slate-950">Latest application</h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Latest application</h2>
           <Button variant="ghost" className="min-h-10 px-3" onClick={() => onNavigate?.("/worker/applications")}>
             Track all
           </Button>
@@ -105,20 +105,20 @@ export default function WorkerDashboard({ onNavigate }) {
         {!applications.loading && !applications.error && latestApplication && (
           <div className="mt-4 grid gap-2 text-sm sm:grid-cols-4">
             <div>
-              <p className="font-semibold text-slate-700">Job</p>
-              <p className="text-slate-600">{latestApplication.jobId?.title || "Job"}</p>
+              <p className="font-semibold text-slate-700 dark:text-slate-300">Job</p>
+              <p className="text-slate-600 dark:text-slate-400">{latestApplication.jobId?.title || "Job"}</p>
             </div>
             <div>
-              <p className="font-semibold text-slate-700">Status</p>
-              <p className="text-slate-600">{formatStatus(latestApplication.status)}</p>
+              <p className="font-semibold text-slate-700 dark:text-slate-300">Status</p>
+              <p className="text-slate-600 dark:text-slate-400">{formatStatus(latestApplication.status)}</p>
             </div>
             <div>
-              <p className="font-semibold text-slate-700">Applied</p>
-              <p className="text-slate-600">{formatDate(latestApplication.appliedAt || latestApplication.createdAt)}</p>
+              <p className="font-semibold text-slate-700 dark:text-slate-300">Applied</p>
+              <p className="text-slate-600 dark:text-slate-400">{formatDate(latestApplication.appliedAt || latestApplication.createdAt)}</p>
             </div>
             <div>
-              <p className="font-semibold text-slate-700">Match</p>
-              <p className="text-slate-600">{latestApplication.matchScore ?? "-"}%</p>
+              <p className="font-semibold text-slate-700 dark:text-slate-300">Match</p>
+              <p className="text-slate-600 dark:text-slate-400">{latestApplication.matchScore ?? "-"}%</p>
             </div>
           </div>
         )}

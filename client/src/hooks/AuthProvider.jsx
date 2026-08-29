@@ -3,6 +3,7 @@ import AuthContext from "./auth.context";
 import * as authService from "../services/auth.service.js";
 import * as employerService from "../services/employer.service.js";
 import * as workerService from "../services/worker.service.js";
+import { connectSocket, disconnectSocket } from "../services/socket.service.js";
 import {
   clearSession,
   getDashboardPath,
@@ -37,6 +38,7 @@ export function AuthProvider({ children }) {
 
     setUser(storedUser);
     setProfile(getStoredProfile());
+    connectSocket();
 
     try {
       const freshProfile = await fetchProfileForRole(storedUser);
@@ -65,6 +67,7 @@ export function AuthProvider({ children }) {
     const session = await authService.login(credentials);
     setUser(session.user);
     setProfile(session.profile || null);
+    connectSocket();
     return session;
   }, []);
 
@@ -72,11 +75,13 @@ export function AuthProvider({ children }) {
     const session = await authService.register(payload);
     setUser(session.user);
     setProfile(session.profile || null);
+    connectSocket();
     return session;
   }, []);
 
   const logout = useCallback(async () => {
     await authService.logout();
+    disconnectSocket();
     setUser(null);
     setProfile(null);
   }, []);

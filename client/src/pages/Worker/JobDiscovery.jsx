@@ -136,18 +136,18 @@ export default function WorkerJobDiscovery() {
         description="Search open jobs and apply with your KaushalSetu profile."
       />
 
-      <form onSubmit={submitSearch} className="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+      <form onSubmit={submitSearch} className="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           <Input label="Keyword" value={filters.query} onChange={setField("query")} placeholder="Electrician" />
           <Input label="Category" value={filters.category} onChange={setField("category")} placeholder="Electrical" />
           <Input label="Min salary" type="number" min="0" value={filters.minSalary} onChange={setField("minSalary")} />
           <Input label="Max salary" type="number" min="0" value={filters.maxSalary} onChange={setField("maxSalary")} />
-          <label className="grid gap-1.5 text-sm font-semibold text-slate-700">
+          <label className="grid gap-1.5 text-sm font-semibold text-slate-700 dark:text-[#aebac1]">
             Type
             <select
               value={filters.employmentType}
               onChange={setField("employmentType")}
-              className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-[#2a3942] dark:bg-[#2a3942] dark:text-[#e9edef] dark:placeholder:text-[#8696a0] dark:focus:border-[#00a884] dark:focus:ring-[#00a884]/25"
             >
               <option value="">Any</option>
               {Object.entries(EMPLOYMENT_TYPES).map(([value, label]) => (
@@ -198,21 +198,21 @@ export default function WorkerJobDiscovery() {
         {detailsLoading && <LoadingState label="Loading job..." />}
         {!detailsLoading && jobDetails && (
           <div className="grid gap-3 text-sm">
-            <p className="text-slate-600">{jobDetails.description || "No description provided."}</p>
+            <p className="text-slate-600 dark:text-[#aebac1]">{jobDetails.description || "No description provided."}</p>
             <p>
-              <span className="font-semibold text-slate-700">Type: </span>
+              <span className="font-semibold text-slate-700 dark:text-[#aebac1]">Type: </span>
               {formatEmploymentType(jobDetails.employmentType)}
             </p>
             <p>
-              <span className="font-semibold text-slate-700">Salary: </span>
+              <span className="font-semibold text-slate-700 dark:text-[#aebac1]">Salary: </span>
               {formatSalary(jobDetails.salary)}
             </p>
             <p>
-              <span className="font-semibold text-slate-700">Start: </span>
+              <span className="font-semibold text-slate-700 dark:text-[#aebac1]">Start: </span>
               {formatDate(jobDetails.startDate)}
             </p>
             {appliedIds.includes(jobDetails._id) ? (
-              <p className="font-semibold text-green-700">You have already applied.</p>
+              <p className="font-semibold text-green-700 dark:text-[#25d366]">You have already applied.</p>
             ) : (
               <Button loading={applyingId === jobDetails._id} onClick={() => apply(jobDetails)}>
                 Apply now
