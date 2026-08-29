@@ -26,16 +26,18 @@ export default function Modal({ open, onClose, title, children, footer }) {
         aria-modal="true"
         aria-label={title}
         onMouseDown={(event) => event.stopPropagation()}
-        className="w-full max-w-xl rounded-lg border border-slate-200 bg-white p-6 shadow-2xl dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/50"
+        className="flex max-h-[calc(100vh-2.5rem)] w-full max-w-xl flex-col rounded-lg border border-slate-200 bg-white p-6 shadow-2xl dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/50"
       >
-        <header className="mb-4 flex items-center justify-between gap-3">
+        <header className="mb-4 flex shrink-0 items-center justify-between gap-3">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h2>
-          <Button aria-label="Close dialog" variant="ghost" className="min-h-10 min-w-10 px-3" onClick={onClose}>
+          <Button aria-label="Close dialog" variant="ghost" className="min-h-10 min-w-10 shrink-0 px-3" onClick={onClose}>
             x
           </Button>
         </header>
-        <div>{children}</div>
-        {footer && <footer className="mt-5">{footer}</footer>}
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <div>{children}</div>
+        </div>
+        {footer && <footer className="mt-5 shrink-0">{footer}</footer>}
       </section>
     </div>
   );
