@@ -291,8 +291,8 @@ export const getWorkerApplications = async (req, res) => {
 // GET /api/jobs/recommended
 export const getRecommendedJobs = async (req, res) => {
   try {
-    const workerProfile = await WorkerProfile.findOne({ userId: req.user?.id || req.query.workerId });
-    const jobs = await Job.find({ status: "OPEN" });
+    const workerProfile = await WorkerProfile.findOne({ userId: req.user?.id || req.query.workerId }).populate("skills", "name");;
+    const jobs = await Job.find({ status: "OPEN" }).populate("requiredSkills", "name");;
 
     if (!workerProfile) {
       return res.status(200).json({ success: true, data: jobs });

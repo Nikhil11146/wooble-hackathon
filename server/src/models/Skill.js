@@ -7,7 +7,7 @@ const skillSchema = new mongoose.Schema(
     description: String,
     totalWorkers: { type: Number, default: 0, min: 0 },
   },
-  { timestamps: true },
+  { timestamps: true }, 
 );
 
 export default mongoose.model("Skill", skillSchema);
