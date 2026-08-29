@@ -5,7 +5,7 @@ const sendError = (res, error) => res.status(error.statusCode || 500).json({ suc
 
 export const requestVerification = async (req, res) => {
   try {
-    const verification = await requestSkillVerification({ ...req.body, workerId: req.user.id });
+    const verification = await requestSkillVerification(req.body);
     return res.status(201).json({ success: true, message: "Verification request submitted successfully.", data: verification });
   } catch (error) { return sendError(res, error); }
 };
