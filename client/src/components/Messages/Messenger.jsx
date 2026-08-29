@@ -168,7 +168,7 @@ export default function Messenger() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start">
-      <aside className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25">
+      <aside className={`overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 ${active ? "hidden lg:block" : "block"}`}>
         <div className="flex items-center justify-between gap-3 border-b border-slate-100 p-4 dark:border-[#222d34]">
           <h2 className="font-bold text-slate-950 dark:text-[#e9edef]">Conversations</h2>
           <Button variant="secondary" className="min-h-9 px-3 text-sm" onClick={() => setComposerOpen(true)}>
@@ -227,7 +227,7 @@ export default function Messenger() {
         )}
       </aside>
 
-      <section className="flex max-h-[70vh] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25">
+      <section className={`max-h-[70vh] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 ${active ? "flex" : "hidden lg:flex"}`}>
         {!active ? (
           <div className="grid flex-1 place-items-center p-6">
             <EmptyState title="Select a conversation" message="Pick a thread to read and reply to messages." />
@@ -235,7 +235,15 @@ export default function Messenger() {
         ) : (
           <>
             <header className="flex items-center gap-3 border-b border-slate-100 p-4 dark:border-[#222d34]">
-              <span className="grid h-10 w-10 place-items-center rounded-full bg-blue-600 text-sm font-bold text-white">
+              <button
+                type="button"
+                aria-label="Back to conversations"
+                onClick={() => setActive(null)}
+                className="-ml-1 grid h-9 w-9 shrink-0 cursor-pointer place-items-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 dark:text-[#e9edef] dark:hover:bg-[#2a3942] lg:hidden"
+              >
+                ←
+              </button>
+              <span className="hidden h-10 w-10 place-items-center rounded-full bg-blue-600 text-sm font-bold text-white lg:grid">
                 {initialsOf(active.otherUser?.name)}
               </span>
               <div className="min-w-0">

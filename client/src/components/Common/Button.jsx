@@ -5,12 +5,18 @@ const VARIANTS = {
   ghost: "bg-transparent text-blue-600 hover:bg-blue-50 dark:text-[#00a884] dark:hover:bg-[#00a884]/10",
 };
 
+const SIZES = {
+  sm: "min-h-10 rounded-lg px-3 py-2 text-sm",
+  md: "min-h-12 rounded-xl px-4 py-2.5 text-[15px]",
+};
+
 export default function Button({
   children,
   variant = "primary",
   type = "button",
   loading = false,
   disabled = false,
+  size = "md",
   className = "",
   ...props
 }) {
@@ -21,10 +27,11 @@ export default function Button({
       type={type}
       disabled={isDisabled}
       className={[
-        "inline-flex min-h-12 items-center justify-center rounded-xl px-4 py-2.5 text-[15px] font-semibold transition-colors",
+        "inline-flex items-center justify-center font-semibold transition-colors",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600",
         isDisabled ? "cursor-not-allowed opacity-60" : "cursor-pointer",
         VARIANTS[variant] || VARIANTS.primary,
+        SIZES[size] || SIZES.md,
         className,
       ].join(" ")}
       {...props}

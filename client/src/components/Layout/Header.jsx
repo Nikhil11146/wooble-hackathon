@@ -5,21 +5,21 @@ export default function Header({ user, onNavigate, onLogout }) {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-white/40 bg-white/70 px-[5vw] py-3.5 shadow-lg shadow-slate-900/5 backdrop-blur-xl dark:border-[#222d34] dark:bg-[#202c33]/90 dark:shadow-black/30">
+    <header className="sticky top-0 z-40 flex items-center justify-between gap-3 border-b border-white/40 bg-white/70 px-4 py-3 shadow-lg shadow-slate-900/5 backdrop-blur-xl dark:border-[#222d34] dark:bg-[#202c33]/90 dark:shadow-black/30 sm:px-[5vw] sm:py-3.5">
       <button
         type="button"
         onClick={() => onNavigate?.("/")}
-        className="cursor-pointer border-0 bg-transparent text-2xl font-black tracking-tight text-blue-700 dark:text-[#00a884]"
+        className="cursor-pointer border-0 bg-transparent text-lg font-black leading-none tracking-tight text-blue-700 dark:text-[#00a884] sm:text-2xl"
       >
         KaushalSetu
       </button>
 
-      <nav className="flex items-center gap-3">
+      <nav className="flex shrink-0 items-center gap-2 sm:gap-3">
         <button
           type="button"
           onClick={toggleTheme}
           aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-          className="grid h-9 w-9 cursor-pointer place-items-center rounded-lg text-slate-600 transition-colors hover:bg-slate-100 dark:text-[#e9edef] dark:hover:bg-[#2a3942]"
+          className="grid h-10 w-10 shrink-0 cursor-pointer place-items-center rounded-lg border border-slate-200 text-slate-600 transition-colors hover:bg-slate-100 dark:border-[#2a3942] dark:text-[#e9edef] dark:hover:bg-[#2a3942]"
         >
           {theme === "dark" ? (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
@@ -35,17 +35,17 @@ export default function Header({ user, onNavigate, onLogout }) {
 
         {user ? (
           <>
-            <span className="hidden text-sm text-slate-600 dark:text-[#e9edef] sm:inline">{user.email}</span>
-            <Button variant="secondary" onClick={onLogout}>
+            <span className="hidden max-w-44 truncate text-sm text-slate-600 dark:text-[#e9edef] lg:inline">{user.email}</span>
+            <Button size="sm" variant="secondary" onClick={onLogout}>
               Log out
             </Button>
           </>
         ) : (
           <>
-            <Button variant="ghost" onClick={() => onNavigate?.("/login")}>
+            <Button size="sm" variant="ghost" className="px-2 sm:px-3" onClick={() => onNavigate?.("/login")}>
               Log in
             </Button>
-            <Button onClick={() => onNavigate?.("/register")}>Join now</Button>
+            <Button size="sm" onClick={() => onNavigate?.("/register")}>Join now</Button>
           </>
         )}
       </nav>
