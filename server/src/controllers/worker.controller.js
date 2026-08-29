@@ -1,6 +1,13 @@
 import WorkerProfile from "../models/WorkerProfile.js";
 import Job from "../models/Job.js";
 import Application from "../models/Application.js";
+import {
+  addWorkerSkill as addSkill,
+  applyForJob,
+  getWorkerApplications as findWorkerApplications,
+  getWorkerProfile as findWorkerProfile,
+  updateWorkerProfile as updateProfile,
+} from "../services/worker.service.js";
 
 // Helper function to calculate trust score based on specs
 export const computeTrustScore = (profile) => {
@@ -66,7 +73,7 @@ export const computeTrustScore = (profile) => {
 // GET /api/workers/me
 export const getMyProfile = async (req, res) => {
   try {
-    const profile = await WorkerProfile.findOne({ userId: req.user.id });
+    const profile = await findWorkerProfile(req.user.id);
     if (!profile) {
       return res.status(404).json({ success: false, message: "Worker profile not found." });
     }
@@ -93,18 +100,7 @@ export const getWorkerProfile = async (req, res) => {
 // PUT /api/workers/:id or PUT /api/workers/:id/profile
 export const updateWorkerProfile = async (req, res) => {
   try {
-    const { id } = req.params;
-    let profile = await WorkerProfile.findOne({ $or: [{ _id: id }, { userId: id }] });
-    if (!profile) {
-      return res.status(404).json({ success: false, message: "Worker profile not found." });
-    }
-
-    Object.assign(profile, req.body);
-    const trustScore = computeTrustScore(profile);
-    profile.kaushalTrustScore = trustScore.total;
-    profile.trustScoreBreakdown = trustScore.breakdown;
-
-    await profile.save();
+    const profile = await updateProfile(req.params.id, req.body);
     return res.status(200).json({ success: true, message: "Profile updated successfully.", data: profile });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
@@ -128,24 +124,7 @@ export const getWorkerSkills = async (req, res) => {
 // POST /api/workers/:id/skills
 export const addWorkerSkill = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { name, verificationStatus } = req.body;
-    const profile = await WorkerProfile.findOne({ $or: [{ _id: id }, { userId: id }] });
-    if (!profile) {
-      return res.status(404).json({ success: false, message: "Worker profile not found." });
-    }
-
-    profile.skills.push({
-      name,
-      verificationStatus: verificationStatus || "SELF_DECLARED",
-      verified: false,
-    });
-
-    const trustScore = computeTrustScore(profile);
-    profile.kaushalTrustScore = trustScore.total;
-    profile.trustScoreBreakdown = trustScore.breakdown;
-
-    await profile.save();
+    const profile = await addSkill(req.params.id, req.body);
     return res.status(201).json({ success: true, message: "Skill added successfully.", data: profile.skills });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
@@ -302,8 +281,7 @@ export const getTrustScore = async (req, res) => {
 // GET /api/workers/:id/applications
 export const getWorkerApplications = async (req, res) => {
   try {
-    const { id } = req.params;
-    const applications = await Application.find({ workerId: id }).populate("jobId");
+    const applications = await findWorkerApplications(req.params.id);
     return res.status(200).json({ success: true, data: applications });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
@@ -382,19 +360,7 @@ export const getJobById = async (req, res) => {
 // POST /api/applications
 export const applyToJob = async (req, res) => {
   try {
-    const { jobId, workerId, notes } = req.body;
-    const existing = await Application.findOne({ jobId, workerId });
-    if (existing) {
-      return res.status(400).json({ success: false, message: "Already applied to this job." });
-    }
-
-    const application = await Application.create({
-      jobId,
-      workerId,
-      notes: notes || "",
-      status: "APPLIED",
-      appliedAt: new Date(),
-    });
+    const application = await applyForJob(req.body);
 
     return res.status(201).json({ success: true, message: "Application submitted successfully.", data: application });
   } catch (error) {

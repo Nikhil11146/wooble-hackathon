@@ -2,11 +2,12 @@ import EmployerProfile from "../models/EmployerProfile.js";
 import Job from "../models/Job.js";
 import Application from "../models/Application.js";
 import WorkerProfile from "../models/WorkerProfile.js";
+import { createEmployerJob, getEmployerProfile } from "../services/employer.service.js";
 
 // GET /api/employers/me
 export const getMyProfile = async (req, res) => {
   try {
-    const profile = await EmployerProfile.findOne({ userId: req.user.id });
+    const profile = await getEmployerProfile(req.user.id);
     if (!profile) {
       return res.status(404).json({ success: false, message: "Employer profile not found." });
     }
@@ -49,10 +50,7 @@ export const getEmployerJobs = async (req, res) => {
 export const createJob = async (req, res) => {
   try {
     const { id } = req.params;
-    const job = await Job.create({
-      ...req.body,
-      employerId: id,
-    });
+    const job = await createEmployerJob(id, req.body);
     return res.status(201).json({ success: true, message: "Job posted successfully.", data: job });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
