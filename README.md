@@ -1,4 +1,4 @@
-# KaushalSetu
+﻿# KaushalSetu
 
 **Verified Skills. Trusted Workers. Faster Hiring.**
 
@@ -126,10 +126,7 @@ KaushalSetu is a specialized hiring platform designed for blue-collar workers in
 ### Three-Tier Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    CLIENT TIER (Web/Mobile)                  │
-│                                                               │
-│  React + TypeScript | Vite | Tailwind CSS | shadcn/ui       │
+┌─────────────────────────────────────────────────────────────�│  React + JavaScript | Vite | Tailwind CSS | shadcn/ui        │
 │                                                               │
 │  ├─ Landing Page                                             │
 │  ├─ Worker Portal (Dashboard, Profile, Jobs, Applications)  │
@@ -137,11 +134,16 @@ KaushalSetu is a specialized hiring platform designed for blue-collar workers in
 │  ├─ Admin Dashboard (Verification, Users, Analytics)        │
 │  └─ Messaging System                                         │
 └─────────────────────────────────────────────────────────────┘
+                               ↕️ REST API
+┌─────────────────────────────────────────────────────────────┐
+│                   APPLICATION TIER (Backend)                 │
+│                                                               │
+│  Node.js + Express + JavaScript (ESM)                        │────┘
                               ↕️ REST API
 ┌─────────────────────────────────────────────────────────────┐
 │                   APPLICATION TIER (Backend)                 │
 │                                                               │
-│  Node.js + Express + TypeScript                             │
+│  Node.js + Express + JavaScript (ESM)                             │
 │                                                               │
 │  ├─ Routes Layer (Authentication, Resources)                │
 │  ├─ Controllers (Request handling, validation)              │
@@ -180,12 +182,12 @@ KaushalSetu is a specialized hiring platform designed for blue-collar workers in
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
-| **Frontend** | React 18 + TypeScript | UI components, type safety |
+| **Frontend** | React 18 + JavaScript | UI components |
 | **Build** | Vite | Fast development, optimized builds |
 | **Styling** | Tailwind CSS + shadcn/ui | Responsive, accessible components |
 | **Backend Runtime** | Node.js 18+ | JavaScript runtime |
 | **Backend Framework** | Express.js | HTTP server, routing, middleware |
-| **Backend Language** | TypeScript | Type safety, better DX |
+| **Backend Language** | JavaScript (ESM) | Clean modern JS, better DX |
 | **Database** | MongoDB 5.0+ | Document-oriented, flexible schema |
 | **ORM** | Mongoose 7.x | Schema validation, middleware |
 | **Authentication** | JWT + bcryptjs | Stateless auth, password hashing |
@@ -714,144 +716,142 @@ kaushal-setu/
 ├── server/                           # Node.js + Express backend
 │   ├── src/
 │   │   ├── models/                  # MongoDB schemas
-│   │   │   ├── User.ts
-│   │   │   ├── WorkerProfile.ts
-│   │   │   ├── EmployerProfile.ts
-│   │   │   ├── Job.ts
-│   │   │   ├── Application.ts
-│   │   │   ├── Skill.ts
-│   │   │   ├── Certification.ts
-│   │   │   ├── Verification.ts
-│   │   │   ├── Rating.ts
-│   │   │   ├── Message.ts
-│   │   │   └── Notification.ts
+│   │   │   ├── User.js
+│   │   │   ├── WorkerProfile.js
+│   │   │   ├── EmployerProfile.js
+│   │   │   ├── Job.js
+│   │   │   ├── Application.js
+│   │   │   ├── Skill.js
+│   │   │   ├── Certification.js
+│   │   │   ├── Verification.js
+│   │   │   ├── Rating.js
+│   │   │   ├── Message.js
+│   │   │   └── Notification.js
 │   │   ├── routes/                  # API routes
-│   │   │   ├── auth.routes.ts
-│   │   │   ├── worker.routes.ts
-│   │   │   ├── employer.routes.ts
-│   │   │   ├── verification.routes.ts
-│   │   │   ├── admin.routes.ts
-│   │   │   └── index.ts
+│   │   │   ├── auth.routes.js
+│   │   │   ├── worker.routes.js
+│   │   │   ├── employer.routes.js
+│   │   │   ├── verification.routes.js
+│   │   │   ├── admin.routes.js
+│   │   │   └── index.js
 │   │   ├── controllers/             # Request handlers
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── worker.controller.ts
-│   │   │   ├── employer.controller.ts
-│   │   │   ├── verification.controller.ts
-│   │   │   └── admin.controller.ts
+│   │   │   ├── auth.controller.js
+│   │   │   ├── worker.controller.js
+│   │   │   ├── employer.controller.js
+│   │   │   ├── verification.controller.js
+│   │   │   └── admin.controller.js
 │   │   ├── services/                # Business logic
-│   │   │   ├── auth.service.ts
-│   │   │   ├── worker.service.ts
-│   │   │   ├── employer.service.ts
-│   │   │   ├── matching.service.ts
-│   │   │   ├── trust-score.service.ts
-│   │   │   ├── notification.service.ts
-│   │   │   └── verification.service.ts
+│   │   │   ├── auth.service.js
+│   │   │   ├── worker.service.js
+│   │   │   ├── employer.service.js
+│   │   │   ├── matching.service.js
+│   │   │   ├── trust-score.service.js
+│   │   │   ├── notification.service.js
+│   │   │   └── verification.service.js
 │   │   ├── middleware/              # Express middleware
-│   │   │   ├── auth.middleware.ts
-│   │   │   ├── role.middleware.ts
-│   │   │   ├── validation.middleware.ts
-│   │   │   └── error.middleware.ts
+│   │   │   ├── auth.middleware.js
+│   │   │   ├── role.middleware.js
+│   │   │   ├── validation.middleware.js
+│   │   │   └── error.middleware.js
 │   │   ├── utils/                   # Utilities
-│   │   │   ├── jwt.ts
-│   │   │   ├── password.ts
-│   │   │   ├── matching-algo.ts
-│   │   │   ├── trust-score-algo.ts
-│   │   │   ├── logger.ts
-│   │   │   └── constants.ts
+│   │   │   ├── jwt.js
+│   │   │   ├── password.js
+│   │   │   ├── matching-algo.js
+│   │   │   ├── trust-score-algo.js
+│   │   │   ├── logger.js
+│   │   │   └── constants.js
 │   │   ├── config/                  # Configuration
-│   │   │   ├── database.ts
-│   │   │   ├── env.ts
-│   │   │   └── constants.ts
+│   │   │   ├── database.js
+│   │   │   ├── env.js
+│   │   │   └── constants.js
 │   │   ├── seed/                    # Seed data
-│   │   │   ├── index.ts
-│   │   │   ├── users.ts
-│   │   │   ├── workers.ts
-│   │   │   ├── employers.ts
-│   │   │   ├── jobs.ts
-│   │   │   └── applications.ts
-│   │   └── server.ts                # Entry point
+│   │   │   ├── index.js
+│   │   │   ├── users.js
+│   │   │   ├── workers.js
+│   │   │   ├── employers.js
+│   │   │   ├── jobs.js
+│   │   │   └── applications.js
+│   │   └── server.js                # Entry point
 │   ├── .env.example
 │   ├── .gitignore
 │   ├── package.json
-│   ├── tsconfig.json
 │   └── README.md
 │
-├── client/                           # React + TypeScript frontend
+├── client/                           # React + JavaScript frontend
 │   ├── src/
 │   │   ├── pages/
-│   │   │   ├── Landing.tsx
+│   │   │   ├── Landing.jsx
 │   │   │   ├── Auth/
-│   │   │   │   ├── Login.tsx
-│   │   │   │   ├── Register.tsx
-│   │   │   │   └── WorkerOnboarding.tsx
+│   │   │   │   ├── Login.jsx
+│   │   │   │   ├── Register.jsx
+│   │   │   │   └── WorkerOnboarding.jsx
 │   │   │   ├── Worker/
-│   │   │   │   ├── Dashboard.tsx
-│   │   │   │   ├── Profile.tsx
-│   │   │   │   ├── Skills.tsx
-│   │   │   │   ├── JobDiscovery.tsx
-│   │   │   │   ├── Applications.tsx
-│   │   │   │   └── Messages.tsx
+│   │   │   │   ├── Dashboard.jsx
+│   │   │   │   ├── Profile.jsx
+│   │   │   │   ├── Skills.jsx
+│   │   │   │   ├── JobDiscovery.jsx
+│   │   │   │   ├── Applications.jsx
+│   │   │   │   └── Messages.jsx
 │   │   │   ├── Employer/
-│   │   │   │   ├── Dashboard.tsx
-│   │   │   │   ├── PostJob.tsx
-│   │   │   │   ├── CandidateSearch.tsx
-│   │   │   │   ├── Pipeline.tsx
-│   │   │   │   └── Analytics.tsx
+│   │   │   │   ├── Dashboard.jsx
+│   │   │   │   ├── PostJob.jsx
+│   │   │   │   ├── CandidateSearch.jsx
+│   │   │   │   ├── Pipeline.jsx
+│   │   │   │   └── Analytics.jsx
 │   │   │   └── Admin/
-│   │   │       ├── Dashboard.tsx
-│   │   │       ├── Verifications.tsx
-│   │   │       └── PlatformStats.tsx
+│   │   │       ├── Dashboard.jsx
+│   │   │       ├── Verifications.jsx
+│   │   │       └── PlatformStats.jsx
 │   │   ├── components/
 │   │   │   ├── Layout/
-│   │   │   │   ├── Header.tsx
-│   │   │   │   ├── Sidebar.tsx
-│   │   │   │   └── Footer.tsx
+│   │   │   │   ├── Header.jsx
+│   │   │   │   ├── Sidebar.jsx
+│   │   │   │   └── Footer.jsx
 │   │   │   ├── Cards/
-│   │   │   │   ├── JobCard.tsx
-│   │   │   │   ├── CandidateCard.tsx
-│   │   │   │   └── SkillCard.tsx
+│   │   │   │   ├── JobCard.jsx
+│   │   │   │   ├── CandidateCard.jsx
+│   │   │   │   └── SkillCard.jsx
 │   │   │   ├── Forms/
-│   │   │   │   ├── JobForm.tsx
-│   │   │   │   ├── ProfileForm.tsx
-│   │   │   │   └── SkillForm.tsx
+│   │   │   │   ├── JobForm.jsx
+│   │   │   │   ├── ProfileForm.jsx
+│   │   │   │   └── SkillForm.jsx
 │   │   │   └── Common/
-│   │   │       ├── Modal.tsx
-│   │   │       ├── Button.tsx
-│   │   │       ├── Input.tsx
-│   │   │       └── TrustScore.tsx
+│   │   │       ├── Modal.jsx
+│   │   │       ├── Button.jsx
+│   │   │       ├── Input.jsx
+│   │   │       └── TrustScore.jsx
 │   │   ├── hooks/
-│   │   │   ├── useAuth.ts
-│   │   │   ├── useApi.ts
-│   │   │   ├── useLocation.ts
-│   │   │   └── useNotifications.ts
+│   │   │   ├── useAuth.js
+│   │   │   ├── useApi.js
+│   │   │   ├── useLocation.js
+│   │   │   └── useNotifications.js
 │   │   ├── services/
-│   │   │   ├── api.ts
-│   │   │   ├── auth.service.ts
-│   │   │   ├── worker.service.ts
-│   │   │   ├── employer.service.ts
-│   │   │   └── admin.service.ts
+│   │   │   ├── api.js
+│   │   │   ├── auth.service.js
+│   │   │   ├── worker.service.js
+│   │   │   ├── employer.service.js
+│   │   │   └── admin.service.js
 │   │   ├── types/
-│   │   │   ├── user.ts
-│   │   │   ├── worker.ts
-│   │   │   ├── employer.ts
-│   │   │   ├── job.ts
-│   │   │   └── application.ts
+│   │   │   ├── user.js
+│   │   │   ├── worker.js
+│   │   │   ├── employer.js
+│   │   │   ├── job.js
+│   │   │   └── application.js
 │   │   ├── utils/
-│   │   │   ├── auth.ts
-│   │   │   ├── format.ts
-│   │   │   ├── validation.ts
-│   │   │   └── constants.ts
+│   │   │   ├── auth.js
+│   │   │   ├── format.js
+│   │   │   ├── validation.js
+│   │   │   └── constants.js
 │   │   ├── config/
-│   │   │   ├── i18n.ts
-│   │   │   └── routes.ts
-│   │   ├── App.tsx
-│   │   ├── main.tsx
+│   │   │   ├── i18n.js
+│   │   │   └── routes.js
+│   │   ├── App.jsx
+│   │   ├── main.jsx
 │   │   └── index.css
 │   ├── .env.example
 │   ├── .gitignore
 │   ├── package.json
-│   ├── vite.config.ts
-│   ├── tsconfig.json
+│   ├── vite.config.js
 │   ├── tailwind.config.js
 │   ├── postcss.config.js
 │   └── README.md
@@ -1026,7 +1026,7 @@ VITE_ENABLE_AI_FEATURES=true
 - Conversion rate tracking
 
 #### 6. **Production-Ready Code**
-- TypeScript throughout
+- Modern JavaScript (ESM) throughout
 - Proper error handling
 - Input validation
 - Security best practices
@@ -1075,3 +1075,4 @@ For questions or issues, please contact the development team or open an issue on
 **Built for Blue Workforce Connect '26 Hackathon**
 
 *Verified Skills. Trusted Workers. Faster Hiring.*
+
