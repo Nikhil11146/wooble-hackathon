@@ -72,12 +72,12 @@ export default function JobForm({ initialValue = {}, onSubmit, submitting = fals
       <Input label="Job title" value={form.title} onChange={set("title")} required />
       <Input label="Category" value={form.category} onChange={set("category")} placeholder="e.g. Electrical" />
 
-      <label className="grid gap-1.5 text-sm font-semibold text-slate-700">
+      <label className="grid gap-1.5 text-sm font-semibold text-slate-700 dark:text-[#e9edef]">
         Description
         <textarea
           value={form.description}
           onChange={set("description")}
-          className="min-h-28 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="min-h-28 w-full rounded-lg border border-slate-300 px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-[#2a3942] dark:bg-[#2a3942] dark:text-[#e9edef] dark:placeholder:text-[#8696a0] dark:focus:border-[#00a884] dark:focus:ring-[#00a884]/25"
         />
       </label>
 
@@ -97,12 +97,12 @@ export default function JobForm({ initialValue = {}, onSubmit, submitting = fals
         <Input label="Start date" type="date" value={form.startDate} onChange={set("startDate")} />
       </div>
 
-      <label className="grid gap-1.5 text-sm font-semibold text-slate-700">
+      <label className="grid gap-1.5 text-sm font-semibold text-slate-700 dark:text-[#e9edef]">
         Employment type
         <select
           value={form.employmentType}
           onChange={set("employmentType")}
-          className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-[#2a3942] dark:bg-[#2a3942] dark:text-[#e9edef] dark:focus:border-[#00a884] dark:focus:ring-[#00a884]/25"
         >
           {Object.entries(EMPLOYMENT_TYPES).map(([value, label]) => (
             <option key={value} value={value}>

@@ -65,33 +65,33 @@ export default function AdminVerifications() {
           ) : (
             <div className="grid gap-4">
               {items.map((verification) => (
-                <article key={verification._id} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+                <article key={verification._id} className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <h2 className="text-lg font-bold text-slate-950">{verification.skillName}</h2>
-                        <span className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
+                        <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">{verification.skillName}</h2>
+                        <span className="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 dark:bg-[#2a3942] dark:text-[#aebac1]">
                           {formatStatus(verification.verificationStatus)}
                         </span>
                       </div>
                       <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-4">
                         <div>
-                          <dt className="font-semibold text-slate-700">Worker</dt>
-                          <dd className="text-slate-600">{workerLabel(verification)}</dd>
+                          <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Worker</dt>
+                          <dd className="text-slate-600 dark:text-[#aebac1]">{workerLabel(verification)}</dd>
                         </div>
                         <div>
-                          <dt className="font-semibold text-slate-700">Type</dt>
-                          <dd className="text-slate-600">{formatStatus(verification.verificationType)}</dd>
+                          <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Type</dt>
+                          <dd className="text-slate-600 dark:text-[#aebac1]">{formatStatus(verification.verificationType)}</dd>
                         </div>
                         <div>
-                          <dt className="font-semibold text-slate-700">Requested</dt>
-                          <dd className="text-slate-600">{formatDate(verification.createdAt)}</dd>
+                          <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Requested</dt>
+                          <dd className="text-slate-600 dark:text-[#aebac1]">{formatDate(verification.createdAt)}</dd>
                         </div>
                         <div>
-                          <dt className="font-semibold text-slate-700">Document</dt>
-                          <dd className="text-slate-600">
+                          <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Document</dt>
+                          <dd className="text-slate-600 dark:text-[#aebac1]">
                             {verification.documentUrl ? (
-                              <a className="font-semibold text-blue-700" href={verification.documentUrl} target="_blank" rel="noreferrer">
+                              <a className="font-semibold text-blue-700 dark:text-[#00a884]" href={verification.documentUrl} target="_blank" rel="noreferrer">
                                 Open
                               </a>
                             ) : (
@@ -100,7 +100,7 @@ export default function AdminVerifications() {
                           </dd>
                         </div>
                       </dl>
-                      {verification.notes && <p className="mt-3 text-sm text-slate-600">{verification.notes}</p>}
+                      {verification.notes && <p className="mt-3 text-sm text-slate-600 dark:text-[#aebac1]">{verification.notes}</p>}
                     </div>
                     <div className="flex flex-wrap gap-2">
                       <Button loading={reviewingId === verification._id} onClick={() => review(verification, "approve")}>

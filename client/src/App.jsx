@@ -20,6 +20,7 @@ import EmployerPostJob from "./pages/Employer/PostJob";
 import EmployerCandidateSearch from "./pages/Employer/CandidateSearch";
 import EmployerPipeline from "./pages/Employer/Pipeline";
 import EmployerAnalytics from "./pages/Employer/Analytics";
+import EmployerMessages from "./pages/Employer/Messages";
 import AdminDashboard from "./pages/Admin/Dashboard";
 import AdminVerifications from "./pages/Admin/Verifications";
 import AdminPlatformStats from "./pages/Admin/PlatformStats";
@@ -124,6 +125,7 @@ function ClientApp() {
     if (pathname === "/employer/jobs/new") return <EmployerPostJob onNavigate={navigate} />;
     if (pathname === "/employer/candidates") return <EmployerCandidateSearch />;
     if (pathname === "/employer/pipeline") return <EmployerPipeline />;
+    if (pathname === "/employer/messages") return <EmployerMessages />;
     if (pathname === "/employer/analytics") return <EmployerAnalytics />;
 
     if (pathname === "/admin") return <AdminDashboard />;
@@ -134,7 +136,7 @@ function ClientApp() {
   }, [auth, navigate, pathname, routeRole]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 dark:bg-transparent">
       <Header user={auth.user} onNavigate={navigate} onLogout={logout} />
       {routeRole && auth.isAuthenticated && auth.user?.role === routeRole ? (
         <PortalFrame role={routeRole} pathname={pathname} onNavigate={navigate}>

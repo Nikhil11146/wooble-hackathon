@@ -73,10 +73,10 @@ export default function EmployerPipeline() {
       {!pipeline.loading && !pipeline.error && total > 0 && (
         <div className="grid gap-4 xl:grid-cols-5">
           {columns.map((status) => (
-            <section key={status} className="rounded-lg border border-slate-200 bg-white shadow-sm">
-              <header className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3">
-                <h2 className="font-bold text-slate-950">{columnLabels[status]}</h2>
-                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600">
+            <section key={status} className="rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+              <header className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3 dark:border-[#222d34]">
+                <h2 className="font-bold text-slate-950 dark:text-[#e9edef]">{columnLabels[status]}</h2>
+                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-600 dark:bg-[#2a3942] dark:text-[#8696a0]">
                   {asList(data[status]).length}
                 </span>
               </header>
@@ -84,18 +84,18 @@ export default function EmployerPipeline() {
                 {asList(data[status]).map((application) => {
                   const job = application.jobId || {};
                   return (
-                    <article key={application._id} className="rounded-lg border border-slate-200 p-3">
-                      <p className="font-semibold text-slate-950">{workerLabel(application)}</p>
-                      <p className="mt-1 text-sm text-slate-600">{job.title || "Job"}</p>
-                      <p className="mt-1 text-xs text-slate-500">{formatSalary(job.salary)}</p>
-                      <p className="mt-2 text-xs text-slate-500">Applied {formatDate(application.appliedAt || application.createdAt)}</p>
-                      <label className="mt-3 grid gap-1 text-xs font-semibold text-slate-600">
+                    <article key={application._id} className="rounded-lg border border-slate-200 p-3 dark:border-[#222d34]">
+                      <p className="font-semibold text-slate-950 dark:text-[#e9edef]">{workerLabel(application)}</p>
+                      <p className="mt-1 text-sm text-slate-600 dark:text-[#aebac1]">{job.title || "Job"}</p>
+                      <p className="mt-1 text-xs text-slate-500 dark:text-[#8696a0]">{formatSalary(job.salary)}</p>
+                      <p className="mt-2 text-xs text-slate-500 dark:text-[#8696a0]">Applied {formatDate(application.appliedAt || application.createdAt)}</p>
+                      <label className="mt-3 grid gap-1 text-xs font-semibold text-slate-600 dark:text-[#aebac1]">
                         Move to
                         <select
                           value={application.status}
                           disabled={movingId === application._id}
                           onChange={(event) => moveApplication(application, event.target.value)}
-                          className="min-h-10 rounded-lg border border-slate-300 bg-white px-2 py-2 text-sm font-normal text-slate-900"
+                          className="min-h-10 rounded-lg border border-slate-300 bg-white px-2 py-2 text-sm font-normal text-slate-900 dark:border-[#2a3942] dark:bg-[#2a3942] dark:text-[#e9edef] dark:placeholder:text-[#8696a0]"
                         >
                           {columns.map((nextStatus) => (
                             <option key={nextStatus} value={nextStatus}>

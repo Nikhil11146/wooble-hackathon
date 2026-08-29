@@ -143,18 +143,18 @@ export default function EmployerCandidateSearch() {
         description="Find workers by skill, occupation, experience, availability, and salary fit."
       />
 
-      <form onSubmit={submitSearch} className="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+      <form onSubmit={submitSearch} className="mb-6 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           <Input label="Skill" value={filters.skill} onChange={setField("skill")} placeholder="Safety" />
           <Input label="Occupation" value={filters.occupation} onChange={setField("occupation")} placeholder="Electrician" />
           <Input label="Min experience" type="number" min="0" value={filters.minExperience} onChange={setField("minExperience")} />
           <Input label="Max salary" type="number" min="0" value={filters.maxSalary} onChange={setField("maxSalary")} />
-          <label className="grid gap-1.5 text-sm font-semibold text-slate-700">
+          <label className="grid gap-1.5 text-sm font-semibold text-slate-700 dark:text-[#aebac1]">
             Availability
             <select
               value={filters.availability}
               onChange={setField("availability")}
-              className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-[#2a3942] dark:bg-[#2a3942] dark:text-[#e9edef] dark:placeholder:text-[#8696a0] dark:focus:border-[#00a884] dark:focus:ring-[#00a884]/25"
             >
               <option value="">Any</option>
               {Object.entries(AVAILABILITY_LABELS).map(([value, label]) => (
@@ -166,12 +166,12 @@ export default function EmployerCandidateSearch() {
           </label>
         </div>
         <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-          <label className="grid gap-1.5 text-sm font-semibold text-slate-700">
+          <label className="grid gap-1.5 text-sm font-semibold text-slate-700 dark:text-[#aebac1]">
             Shortlist for job
             <select
               value={shortlistJobId}
               onChange={(event) => setSelectedJobId(event.target.value)}
-              className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-[#2a3942] dark:bg-[#2a3942] dark:text-[#e9edef] dark:placeholder:text-[#8696a0] dark:focus:border-[#00a884] dark:focus:ring-[#00a884]/25"
             >
               <option value="">Select job</option>
               {jobList.map((job) => (
@@ -231,38 +231,38 @@ export default function EmployerCandidateSearch() {
             <TrustScore score={details.kaushalTrustScore} breakdown={details.trustScoreBreakdown} />
             <dl className="grid gap-3 text-sm sm:grid-cols-2">
               <div>
-                <dt className="font-semibold text-slate-700">Occupation</dt>
-                <dd className="text-slate-600">{details.primaryOccupation || "Not set"}</dd>
+                <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Occupation</dt>
+                <dd className="text-slate-600 dark:text-[#aebac1]">{details.primaryOccupation || "Not set"}</dd>
               </div>
               <div>
-                <dt className="font-semibold text-slate-700">Expected salary</dt>
-                <dd className="text-slate-600">{formatSalary(details.expectedSalary)}</dd>
+                <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Expected salary</dt>
+                <dd className="text-slate-600 dark:text-[#aebac1]">{formatSalary(details.expectedSalary)}</dd>
               </div>
               <div>
-                <dt className="font-semibold text-slate-700">Availability</dt>
-                <dd className="text-slate-600">{AVAILABILITY_LABELS[details.availability] || "Not set"}</dd>
+                <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Availability</dt>
+                <dd className="text-slate-600 dark:text-[#aebac1]">{AVAILABILITY_LABELS[details.availability] || "Not set"}</dd>
               </div>
               <div>
-                <dt className="font-semibold text-slate-700">Contact</dt>
-                <dd className="text-slate-600">{details.phone || details.userId?.email || "Not shared"}</dd>
+                <dt className="font-semibold text-slate-700 dark:text-[#aebac1]">Contact</dt>
+                <dd className="text-slate-600 dark:text-[#aebac1]">{details.phone || details.userId?.email || "Not shared"}</dd>
               </div>
             </dl>
             <div>
-              <h3 className="font-semibold text-slate-900">Skills</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-[#e9edef]">Skills</h3>
               <div className="mt-2 flex flex-wrap gap-2">
                 {(details.skills || []).map((skill) => (
-                  <span key={skill._id || skill.name} className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+                  <span key={skill._id || skill.name} className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 dark:bg-[#2a3942] dark:text-[#aebac1]">
                     {skill.name}
                   </span>
                 ))}
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900">Work history</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-[#e9edef]">Work history</h3>
               <div className="mt-2 grid gap-2">
-                {asList(details.workHistory).length === 0 && <p className="text-sm text-slate-500">No work history listed.</p>}
+                {asList(details.workHistory).length === 0 && <p className="text-sm text-slate-500 dark:text-[#8696a0]">No work history listed.</p>}
                 {asList(details.workHistory).map((item) => (
-                  <p key={item._id || `${item.companyName}-${item.role}`} className="text-sm text-slate-600">
+                  <p key={item._id || `${item.companyName}-${item.role}`} className="text-sm text-slate-600 dark:text-[#aebac1]">
                     {item.role || "Role"} at {item.companyName || "Company"}
                     {item.startDate ? ` (${formatDate(item.startDate)})` : ""}
                   </p>
@@ -270,11 +270,11 @@ export default function EmployerCandidateSearch() {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900">Certifications</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-[#e9edef]">Certifications</h3>
               <div className="mt-2 flex flex-wrap gap-2">
-                {asList(details.certifications).length === 0 && <p className="text-sm text-slate-500">None listed.</p>}
+                {asList(details.certifications).length === 0 && <p className="text-sm text-slate-500 dark:text-[#8696a0]">None listed.</p>}
                 {asList(details.certifications).map((item) => (
-                  <span key={item._id || item.name} className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+                  <span key={item._id || item.name} className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 dark:bg-[#2a3942] dark:text-[#aebac1]">
                     {item.name}
                   </span>
                 ))}

@@ -50,8 +50,8 @@ export default function WorkerOnboarding({ onNavigate }) {
         description="Employers match you on occupation, availability, and verified skills."
       />
 
-      <section className="mx-auto max-w-xl rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <p className="text-sm font-medium text-slate-500">Step {step} of 2</p>
+      <section className="mx-auto max-w-xl rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+        <p className="text-sm font-medium text-slate-500 dark:text-[#8696a0]">Step {step} of 2</p>
         {error && (
           <div className="mt-4">
             <Notice type="error">{error}</Notice>

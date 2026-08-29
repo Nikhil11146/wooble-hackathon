@@ -48,8 +48,8 @@ export default function Login({ onNavigate, redirectTo }) {
   return (
     <main className="mx-auto grid min-h-[calc(100vh-145px)] max-w-5xl items-center gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_420px] lg:px-8">
       <section>
-        <p className="text-sm font-semibold uppercase tracking-wider text-blue-700">Welcome back</p>
-        <h1 className="mt-2 text-3xl font-bold text-slate-950">Open the right portal for your account.</h1>
+        <p className="text-sm font-semibold uppercase tracking-wider text-blue-700 dark:text-[#00a884]">Welcome back</p>
+        <h1 className="mt-2 text-3xl font-bold text-slate-950 dark:text-[#e9edef]">Open the right portal for your account.</h1>
         <div className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
           {demoAccounts.map((account) => (
             <button
@@ -59,17 +59,17 @@ export default function Login({ onNavigate, redirectTo }) {
                 setForm(account);
                 submitLogin(account);
               }}
-              className="rounded-lg border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-blue-300"
+              className="rounded-lg border border-slate-200 bg-white p-4 text-left shadow-sm transition hover:border-blue-300 dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur dark:hover:border-[#00a884]"
             >
-              <span className="block font-semibold text-slate-950">{account.label}</span>
-              <span className="mt-1 block text-sm text-slate-500">{account.email}</span>
+              <span className="block font-semibold text-slate-950 dark:text-[#e9edef]">{account.label}</span>
+              <span className="mt-1 block text-sm text-slate-500 dark:text-[#8696a0]">{account.email}</span>
             </button>
           ))}
         </div>
       </section>
 
-      <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-bold text-slate-950">Log in</h2>
+      <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+        <h2 className="text-xl font-bold text-slate-950 dark:text-[#e9edef]">Log in</h2>
         <form onSubmit={submit} className="mt-5 grid gap-4">
           {apiError && <Notice type="error">{apiError}</Notice>}
           <Input label="Email" type="email" value={form.email} onChange={setField("email")} error={errors.email} />
@@ -78,9 +78,9 @@ export default function Login({ onNavigate, redirectTo }) {
             Log in
           </Button>
         </form>
-        <p className="mt-4 text-sm text-slate-600">
+        <p className="mt-4 text-sm text-slate-600 dark:text-[#aebac1]">
           New here?{" "}
-          <button type="button" className="font-semibold text-blue-700" onClick={() => onNavigate?.("/register")}>
+          <button type="button" className="font-semibold text-blue-700 dark:text-[#00a884]" onClick={() => onNavigate?.("/register")}>
             Create an account
           </button>
         </p>

@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>client</title>
     <link href="/src/index.css" rel="stylesheet">
+    <script>
+      (function () {
+        var stored = null;
+        try { stored = localStorage.getItem("kaushal_theme"); } catch (e) {}
+        var dark = stored === "dark" || (!stored && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        if (dark) document.documentElement.classList.add("dark");
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

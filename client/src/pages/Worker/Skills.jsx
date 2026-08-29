@@ -85,8 +85,8 @@ export default function WorkerSkills() {
       />
 
       <div className="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
-        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-lg font-bold text-slate-950">{editing ? "Edit skill" : "Add skill"}</h2>
+        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+          <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">{editing ? "Edit skill" : "Add skill"}</h2>
           <div className="mt-4">
             <SkillForm key={editing?._id || "new"} initialValue={editing || {}} onSubmit={saveSkill} submitting={submitting} />
           </div>

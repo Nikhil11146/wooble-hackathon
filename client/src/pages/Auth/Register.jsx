@@ -53,19 +53,19 @@ export default function Register({ onNavigate }) {
 
   return (
     <main className="mx-auto flex min-h-[calc(100vh-145px)] max-w-2xl items-center px-4 py-10 sm:px-6 lg:px-8">
-      <section className="w-full rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <p className="text-sm font-semibold uppercase tracking-wider text-blue-700">Create account</p>
-        <h1 className="mt-2 text-2xl font-bold text-slate-950">Start with a worker or employer profile.</h1>
+      <section className="w-full rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
+        <p className="text-sm font-semibold uppercase tracking-wider text-blue-700 dark:text-[#00a884]">Create account</p>
+        <h1 className="mt-2 text-2xl font-bold text-slate-950 dark:text-[#e9edef]">Start with a worker or employer profile.</h1>
 
         <form onSubmit={submit} className="mt-6 grid gap-4">
           {apiError && <Notice type="error">{apiError}</Notice>}
 
-          <label className="grid gap-1.5 text-sm font-semibold text-slate-700">
+          <label className="grid gap-1.5 text-sm font-semibold text-slate-700 dark:text-[#e9edef]">
             Account type
             <select
               value={form.role}
               onChange={setField("role")}
-              className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="min-h-12 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-base font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:border-[#2a3942] dark:bg-[#2a3942] dark:text-[#e9edef] dark:focus:border-[#00a884] dark:focus:ring-[#00a884]/25"
             >
               <option value={ROLES.WORKER}>Worker</option>
               <option value={ROLES.EMPLOYER}>Employer</option>
@@ -88,9 +88,9 @@ export default function Register({ onNavigate }) {
           </Button>
         </form>
 
-        <p className="mt-4 text-sm text-slate-600">
+        <p className="mt-4 text-sm text-slate-600 dark:text-[#aebac1]">
           Already registered?{" "}
-          <button type="button" className="font-semibold text-blue-700" onClick={() => onNavigate?.("/login")}>
+          <button type="button" className="font-semibold text-blue-700 dark:text-[#00a884]" onClick={() => onNavigate?.("/login")}>
             Log in
           </button>
         </p>

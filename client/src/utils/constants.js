@@ -1,5 +1,13 @@
 export const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 
+function socketBaseUrl() {
+  const trimmed = API_BASE_URL.replace(/\/+$/, "");
+  if (trimmed.endsWith("/api")) return trimmed.slice(0, -4);
+  return trimmed;
+}
+
+export const SOCKET_URL = socketBaseUrl();
+
 export const STORAGE_KEYS = {
   TOKEN: "kaushal_token",
   REFRESH_TOKEN: "kaushal_refresh_token",
@@ -83,6 +91,7 @@ export const SIDEBAR_LINKS = {
     ["Post a job", "/employer/jobs/new"],
     ["Candidates", "/employer/candidates"],
     ["Pipeline", "/employer/pipeline"],
+    ["Messages", "/employer/messages"],
     ["Analytics", "/employer/analytics"],
   ],
   ADMIN: [
