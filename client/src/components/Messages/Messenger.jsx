@@ -115,6 +115,33 @@ export default function Messenger() {
     };
   }, [isAuthenticated, refetchConversations, refetchThread]);
 
+  // Fallback so conversations/threads are never stale even if the socket
+  // silently drops: refresh when the tab regains focus and on a quiet poll.
+  useEffect(() => {
+    if (!isAuthenticated) return undefined;
+
+    const refresh = () => {
+      refetchConversations();
+      if (activeIdRef.current) refetchThread();
+    };
+
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+
+    window.addEventListener("focus", onVisibilityChange);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") refresh();
+    }, 15000);
+
+    return () => {
+      window.removeEventListener("focus", onVisibilityChange);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      clearInterval(interval);
+    };
+  }, [isAuthenticated, refetchConversations, refetchThread]);
+
   useEffect(() => {
     const node = scrollRef.current;
     if (node) node.scrollTop = node.scrollHeight;

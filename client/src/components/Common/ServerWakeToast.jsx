@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { API_BASE_URL } from "../../utils/constants.js";
 
 const HEALTH_URL = `${API_BASE_URL.replace(/\/+$/, "").replace(/\/api$/, "")}/health`;
-const PING_INTERVAL_MS = 3000;
+const CHECK_INTERVAL_MS = 4000;
 
 async function serverIsAwake() {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8000);
+  const timer = setTimeout(() => controller.abort(), 6000);
   try {
     const response = await fetch(HEALTH_URL, { signal: controller.signal });
     return response.ok;
@@ -25,11 +25,11 @@ export default function ServerWakeToast() {
     let timer = null;
 
     const check = async () => {
-      if (await serverIsAwake()) {
-        if (!cancelled) setAwake(true);
-        return;
-      }
-      if (!cancelled) timer = setTimeout(check, PING_INTERVAL_MS);
+      if (cancelled) return;
+      const ok = await serverIsAwake();
+      if (cancelled) return;
+      setAwake(ok);
+      timer = setTimeout(check, CHECK_INTERVAL_MS);
     };
 
     check();
