@@ -690,7 +690,7 @@ npm run seed
 ```bash
 cd server
 npm run dev
-# Backend runs on http://localhost:5000
+# Backend runs on http://localhost:3000
 ```
 
 **Terminal 2 - Frontend:**
