@@ -2,6 +2,7 @@ import {
   getConversations as findConversations,
   getMessages as findMessages,
   markThreadRead as updateThreadRead,
+  searchRecipients as findRecipients,
   sendMessage as createMessage,
 } from "../services/message.service.js";
 import { emitToUser } from "../sockets/socket.server.js";
@@ -13,6 +14,16 @@ const sendServiceError = (res, error) =>
 export const listConversations = async (req, res) => {
   try {
     const data = await findConversations(req.user.id);
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    return sendServiceError(res, error);
+  }
+};
+
+// GET /api/messages/recipients?q=
+export const listRecipients = async (req, res) => {
+  try {
+    const data = await findRecipients(req.user.id, req.query.q);
     return res.status(200).json({ success: true, data });
   } catch (error) {
     return sendServiceError(res, error);

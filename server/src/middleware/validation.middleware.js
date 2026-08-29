@@ -42,3 +42,25 @@ export const validate = (validator) => async (req, res, next) => {
     return next(error);
   }
 };
+
+/**
+ * Validates req.body against a Zod schema. On success, replaces req.body with
+ * the parsed (trimmed/typed) data; on failure returns a 400 with field errors.
+ * Example: `router.post("/", validateBody(registerSchema), handler)`.
+ */
+export const validateBody = (schema) => (req, res, next) => {
+  const result = schema.safeParse(req.body ?? {});
+  if (!result.success) {
+    return res.status(400).json({
+      success: false,
+      message: "Validation failed.",
+      errors: result.error.issues.map((issue) => ({
+        field: issue.path.join(".") || "body",
+        message: issue.message,
+      })),
+    });
+  }
+
+  req.body = result.data;
+  return next();
+};

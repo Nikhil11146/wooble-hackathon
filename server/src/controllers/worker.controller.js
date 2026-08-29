@@ -298,13 +298,13 @@ export const getRecommendedJobs = async (req, res) => {
       return res.status(200).json({ success: true, data: jobs });
     }
 
-    const workerSkills = (workerProfile.skills || []).map((s) => s.name?.toLowerCase());
+    const workerSkills = (workerProfile.skills || []).map((s) => String(s?.name || s || "").trim().toLowerCase());
 
     const scoredJobs = jobs.map((job) => {
       const required = job.requiredSkills || [];
       let matchScore = 50; // default base match
       if (required.length > 0) {
-        const matched = required.filter((r) => workerSkills.includes(r.toLowerCase())).length;
+        const matched = required.filter((r) => workerSkills.includes(String(r?.name || r || "").trim().toLowerCase())).length;
         matchScore = Math.round((matched / required.length) * 100);
       }
       return {
