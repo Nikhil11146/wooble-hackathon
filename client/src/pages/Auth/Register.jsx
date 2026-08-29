@@ -80,7 +80,7 @@ export default function Register({ onNavigate }) {
           )}
 
           <Input label="Email" type="email" value={form.email} onChange={setField("email")} error={errors.email} />
-          <Input label="Phone" type="tel" value={form.phone} onChange={setField("phone")} />
+          <Input label="Phone" type="tel" value={form.phone} onChange={setField("phone")} error={errors.phone} />
           <Input label="Password" type="password" value={form.password} onChange={setField("password")} error={errors.password} />
 
           <Button type="submit" loading={submitting}>

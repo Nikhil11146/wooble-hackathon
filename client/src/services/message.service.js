@@ -5,6 +5,11 @@ export async function getConversations() {
   return response.data;
 }
 
+export async function searchRecipients(query) {
+  const response = await api.get("/messages/recipients", { params: { q: query || "" } });
+  return response.data;
+}
+
 export async function getMessages(otherUserId) {
   const response = await api.get(`/messages/${otherUserId}`);
   return response.data;

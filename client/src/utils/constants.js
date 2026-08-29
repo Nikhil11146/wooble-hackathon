@@ -15,6 +15,10 @@ export const STORAGE_KEYS = {
   PROFILE: "kaushal_profile",
 };
 
+export const AUTH_EVENTS = {
+  EXPIRED: "kaushal:auth-expired",
+};
+
 export const ROLES = {
   WORKER: "WORKER",
   EMPLOYER: "EMPLOYER",

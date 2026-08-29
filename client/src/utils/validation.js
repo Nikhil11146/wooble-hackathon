@@ -1,5 +1,5 @@
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PHONE_PATTERN = /^[+]?[\d\s-]{10,15}$/;
+const PHONE_PATTERN = /^(?:\+91)?[6-9]\d{9}$/;
 
 export function isEmail(value) {
   return EMAIL_PATTERN.test(String(value || "").trim());
@@ -11,7 +11,8 @@ export function isPassword(value) {
 
 export function isPhone(value) {
   if (!value) return true;
-  return PHONE_PATTERN.test(String(value).trim());
+  const digits = String(value).trim().replace(/[\s-]/g, "");
+  return PHONE_PATTERN.test(digits);
 }
 
 export function isRequired(value) {
@@ -25,11 +26,12 @@ export function validateLogin({ email, password }) {
   return { valid: Object.keys(errors).length === 0, errors };
 }
 
-export function validateRegister({ email, password, role, name, companyName }) {
+export function validateRegister({ email, password, role, name, companyName, phone }) {
   const errors = {};
   if (!isEmail(email)) errors.email = "Enter a valid email address.";
   if (!isPassword(password)) errors.password = "Password must be at least 6 characters.";
   if (!role) errors.role = "Select an account type.";
+  if (phone && !isPhone(phone)) errors.phone = "Enter a valid phone number.";
   if (role === "WORKER" && !isRequired(name)) errors.name = "Full name is required.";
   if (role === "EMPLOYER" && !isRequired(companyName)) errors.companyName = "Company name is required.";
   return { valid: Object.keys(errors).length === 0, errors };

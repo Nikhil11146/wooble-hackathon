@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { AUTH_EVENTS } from "./utils/constants.js";
 import Header from "./components/Layout/Header";
 import Sidebar from "./components/Layout/Sidebar";
 import Footer from "./components/Layout/Footer";
@@ -95,6 +96,12 @@ function ClientApp() {
     await auth.logout();
     navigate("/");
   }, [auth, navigate]);
+
+  useEffect(() => {
+    const handleAuthExpired = () => navigate("/");
+    window.addEventListener(AUTH_EVENTS.EXPIRED, handleAuthExpired);
+    return () => window.removeEventListener(AUTH_EVENTS.EXPIRED, handleAuthExpired);
+  }, [navigate]);
 
   const page = useMemo(() => {
     if (auth.loading) {

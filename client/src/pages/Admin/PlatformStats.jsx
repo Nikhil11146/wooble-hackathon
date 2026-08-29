@@ -1,4 +1,6 @@
+import { useMemo, useState } from "react";
 import Button from "../../components/Common/Button";
+import Input from "../../components/Common/Input";
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatCard } from "../../components/Common/PageState";
 import TrustScore from "../../components/Common/TrustScore";
 import useApi from "../../hooks/useApi";
@@ -11,7 +13,40 @@ export default function AdminPlatformStats() {
   const workers = useApi(getAllWorkers, [], { immediate: true });
   const employers = useApi(getAllEmployers, [], { immediate: true });
   const jobs = useApi(getAllJobs, [], { immediate: true });
+  const [query, setQuery] = useState("");
   const data = stats.data || {};
+
+  const term = query.trim().toLowerCase();
+
+  const filteredWorkers = useMemo(() => {
+    const list = asList(workers.data);
+    if (!term) return list;
+    return list.filter((worker) =>
+      [worker.name, worker.primaryOccupation, worker.userId?.email]
+        .filter(Boolean)
+        .some((field) => String(field).toLowerCase().includes(term)),
+    );
+  }, [term, workers.data]);
+
+  const filteredEmployers = useMemo(() => {
+    const list = asList(employers.data);
+    if (!term) return list;
+    return list.filter((employer) =>
+      [employer.companyName, employer.userId?.email, employer.industry]
+        .filter(Boolean)
+        .some((field) => String(field).toLowerCase().includes(term)),
+    );
+  }, [term, employers.data]);
+
+  const filteredJobs = useMemo(() => {
+    const list = asList(jobs.data);
+    if (!term) return list;
+    return list.filter((job) =>
+      [job.title, job.category, job.status]
+        .filter(Boolean)
+        .some((field) => String(field).toLowerCase().includes(term)),
+    );
+  }, [term, jobs.data]);
 
   const refreshAll = () => {
     stats.refetch();
@@ -27,6 +62,15 @@ export default function AdminPlatformStats() {
         title="Platform stats"
         description="High-level platform health with recent workers, employers, and jobs."
         action={<Button variant="secondary" onClick={refreshAll}>Refresh</Button>}
+      />
+
+      <Input
+        type="search"
+        placeholder="Search workers, employers, or jobs..."
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        className="mb-6"
+        aria-label="Search platform stats"
       />
 
       {stats.loading && <LoadingState label="Loading stats..." />}
@@ -46,10 +90,10 @@ export default function AdminPlatformStats() {
         </header>
         {workers.loading && <div className="p-4"><LoadingState label="Loading workers..." /></div>}
         {workers.error && <div className="p-4"><ErrorState error={workers.error} onRetry={workers.refetch} /></div>}
-        {!workers.loading && !workers.error && asList(workers.data).length === 0 && (
-          <div className="p-4"><EmptyState title="No workers" /></div>
+        {!workers.loading && !workers.error && filteredWorkers.length === 0 && (
+          <div className="p-4"><EmptyState title={term ? "No matching workers" : "No workers"} /></div>
         )}
-        {!workers.loading && !workers.error && asList(workers.data).length > 0 && (
+        {!workers.loading && !workers.error && filteredWorkers.length > 0 && (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-slate-700">
               <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:bg-[#2a3942] dark:text-[#8696a0]">
@@ -62,7 +106,7 @@ export default function AdminPlatformStats() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                {asList(workers.data).slice(0, 8).map((worker) => (
+                {filteredWorkers.slice(0, 8).map((worker) => (
                   <tr key={worker._id}>
                     <td className="px-4 py-3">
                       <p className="font-semibold text-slate-950 dark:text-[#e9edef]">{worker.name}</p>
@@ -91,7 +135,7 @@ export default function AdminPlatformStats() {
           {employers.error && <div className="p-4"><ErrorState error={employers.error} onRetry={employers.refetch} /></div>}
           {!employers.loading && !employers.error && (
             <div className="divide-y divide-slate-100 dark:divide-slate-700">
-              {asList(employers.data).slice(0, 8).map((employer) => (
+              {filteredEmployers.slice(0, 8).map((employer) => (
                 <div key={employer._id} className="flex flex-wrap items-center justify-between gap-3 p-4">
                   <div>
                     <p className="font-semibold text-slate-950 dark:text-[#e9edef]">{employer.companyName}</p>
@@ -102,7 +146,7 @@ export default function AdminPlatformStats() {
                   </span>
                 </div>
               ))}
-              {asList(employers.data).length === 0 && <div className="p-4"><EmptyState title="No employers" /></div>}
+              {filteredEmployers.length === 0 && <div className="p-4"><EmptyState title={term ? "No matching employers" : "No employers"} /></div>}
             </div>
           )}
         </section>
@@ -115,7 +159,7 @@ export default function AdminPlatformStats() {
           {jobs.error && <div className="p-4"><ErrorState error={jobs.error} onRetry={jobs.refetch} /></div>}
           {!jobs.loading && !jobs.error && (
             <div className="divide-y divide-slate-100 dark:divide-slate-700">
-              {asList(jobs.data).slice(0, 8).map((job) => (
+              {filteredJobs.slice(0, 8).map((job) => (
                 <div key={job._id} className="p-4">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="font-semibold text-slate-950 dark:text-[#e9edef]">{job.title}</p>
@@ -126,7 +170,7 @@ export default function AdminPlatformStats() {
                   <p className="mt-1 text-sm text-slate-500 dark:text-[#8696a0]">{job.category || "General"} - {formatSalary(job.salary)}</p>
                 </div>
               ))}
-              {asList(jobs.data).length === 0 && <div className="p-4"><EmptyState title="No jobs" /></div>}
+              {filteredJobs.length === 0 && <div className="p-4"><EmptyState title={term ? "No matching jobs" : "No jobs"} /></div>}
             </div>
           )}
         </section>

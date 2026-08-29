@@ -4,6 +4,7 @@ import * as authService from "../services/auth.service.js";
 import * as employerService from "../services/employer.service.js";
 import * as workerService from "../services/worker.service.js";
 import { connectSocket, disconnectSocket } from "../services/socket.service.js";
+import { AUTH_EVENTS } from "../utils/constants.js";
 import {
   clearSession,
   getDashboardPath,
@@ -62,6 +63,16 @@ export function AuthProvider({ children }) {
       active = false;
     };
   }, [bootstrap]);
+
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      disconnectSocket();
+      setUser(null);
+      setProfile(null);
+    };
+    window.addEventListener(AUTH_EVENTS.EXPIRED, handleAuthExpired);
+    return () => window.removeEventListener(AUTH_EVENTS.EXPIRED, handleAuthExpired);
+  }, []);
 
   const login = useCallback(async (credentials) => {
     const session = await authService.login(credentials);
