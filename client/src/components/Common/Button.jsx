@@ -29,7 +29,7 @@ export default function Button({
       ].join(" ")}
       {...props}
     >
-      {loading ? "Please wait…" : children}
+      {loading ? "Please wait..." : children}
     </button>
   );
 }

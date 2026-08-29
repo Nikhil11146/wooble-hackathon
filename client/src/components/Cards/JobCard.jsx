@@ -1,18 +1,18 @@
 import Button from "../Common/Button";
 import { formatDistance, formatEmploymentType, formatSalary } from "../../utils/format";
 
-export default function JobCard({ job, onApply, onView }) {
+export default function JobCard({ job, onApply, onView, actionLabel = "Apply" }) {
   const distance = formatDistance(job.location?.distanceKm ?? job.distanceKm);
   const skills = job.requiredSkills || job.skills || [];
 
   return (
-    <article className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <article className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-lg font-semibold text-slate-900">{job.title}</h3>
+        <div className="min-w-0">
+          <h3 className="text-lg font-semibold text-slate-900">{job.title || "Untitled job"}</h3>
           <p className="mt-1 text-sm text-slate-500">
-            {job.category || "General"} · {formatEmploymentType(job.employmentType)}
-            {distance && ` · ${distance}`}
+            {job.category || "General"} - {formatEmploymentType(job.employmentType)}
+            {distance && ` - ${distance}`}
           </p>
         </div>
         {job.matchScore != null && (
@@ -22,7 +22,7 @@ export default function JobCard({ job, onApply, onView }) {
         )}
       </div>
 
-      <p className="mt-3 line-clamp-3 text-slate-600">
+      <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-600">
         {job.description || "No job description provided."}
       </p>
 
@@ -33,7 +33,7 @@ export default function JobCard({ job, onApply, onView }) {
               key={skill._id || skill.name || skill}
               className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700"
             >
-              {typeof skill === "string" ? skill : skill.name}
+              {typeof skill === "string" ? skill : skill.name || skill._id}
             </span>
           ))}
         </div>
@@ -55,7 +55,9 @@ export default function JobCard({ job, onApply, onView }) {
           </Button>
         )}
         {onApply && (
-          <Button onClick={() => onApply(job)}>Apply</Button>
+          <Button onClick={() => onApply(job)}>
+            {actionLabel}
+          </Button>
         )}
       </div>
     </article>

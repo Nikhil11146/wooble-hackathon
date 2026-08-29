@@ -7,13 +7,13 @@ function resolveStatus(skill) {
   return skill.verified ? "APPROVED" : "SELF_DECLARED";
 }
 
-export default function SkillCard({ skill, onEdit, onDelete }) {
+export default function SkillCard({ skill, onEdit, onDelete, onVerify }) {
   const status = resolveStatus(skill);
   const badgeClass = VERIFICATION_COLOURS[status] || "bg-slate-100 text-slate-700";
   const label = VERIFICATION_STATUS[status] || status.replaceAll("_", " ");
 
   return (
-    <article className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4">
+    <article className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white p-4">
       <div>
         <strong className="text-base text-slate-900">{skill.name}</strong>
         {skill.category && (
@@ -23,7 +23,12 @@ export default function SkillCard({ skill, onEdit, onDelete }) {
           {label}
         </span>
       </div>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
+        {onVerify && status !== "APPROVED" && status !== "PENDING" && (
+          <Button variant="ghost" className="min-h-10 px-3" onClick={() => onVerify(skill)}>
+            Verify
+          </Button>
+        )}
         {onEdit && (
           <Button variant="secondary" className="min-h-10 px-3" onClick={() => onEdit(skill)}>
             Edit

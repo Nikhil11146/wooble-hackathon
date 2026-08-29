@@ -26,12 +26,12 @@ export default function Modal({ open, onClose, title, children, footer }) {
         aria-modal="true"
         aria-label={title}
         onMouseDown={(event) => event.stopPropagation()}
-        className="w-full max-w-xl rounded-xl bg-white p-6 shadow-2xl"
+        className="w-full max-w-xl rounded-lg bg-white p-6 shadow-2xl"
       >
         <header className="mb-4 flex items-center justify-between gap-3">
           <h2 className="text-xl font-bold text-slate-900">{title}</h2>
           <Button aria-label="Close dialog" variant="ghost" className="min-h-10 min-w-10 px-3" onClick={onClose}>
-            ×
+            x
           </Button>
         </header>
         <div>{children}</div>

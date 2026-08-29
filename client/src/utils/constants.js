@@ -1,4 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+export const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export const STORAGE_KEYS = {
   TOKEN: "kaushal_token",
@@ -76,6 +76,7 @@ export const SIDEBAR_LINKS = {
     ["Skills", "/worker/skills"],
     ["Jobs", "/worker/jobs"],
     ["Applications", "/worker/applications"],
+    ["Messages", "/worker/messages"],
   ],
   EMPLOYER: [
     ["Dashboard", "/employer"],

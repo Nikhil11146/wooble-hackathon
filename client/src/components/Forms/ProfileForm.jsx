@@ -9,7 +9,7 @@ export default function ProfileForm({ profile = {}, role = "WORKER", onSubmit, s
     companyName: profile.companyName || "",
     phone: profile.phone || "",
     headline: profile.headline || "",
-    bio: profile.bio || "",
+    bio: profile.bio || profile.description || "",
     yearsOfExperience: profile.yearsOfExperience ?? 0,
     primaryOccupation: profile.primaryOccupation || "",
     languages: (profile.languages || []).join(", "),
@@ -32,6 +32,7 @@ export default function ProfileForm({ profile = {}, role = "WORKER", onSubmit, s
 
     if (role === "EMPLOYER") {
       payload.companyName = form.companyName.trim();
+      payload.description = form.bio.trim();
     } else {
       payload.name = form.name.trim();
       payload.primaryOccupation = form.primaryOccupation.trim();
@@ -91,14 +92,14 @@ export default function ProfileForm({ profile = {}, role = "WORKER", onSubmit, s
           />
           <div className="grid gap-4 sm:grid-cols-2">
             <Input
-              label="Expected salary min (₹)"
+              label="Expected salary min (Rs)"
               type="number"
               min="0"
               value={form.expectedSalaryMin}
               onChange={set("expectedSalaryMin")}
             />
             <Input
-              label="Expected salary max (₹)"
+              label="Expected salary max (Rs)"
               type="number"
               min="0"
               value={form.expectedSalaryMax}

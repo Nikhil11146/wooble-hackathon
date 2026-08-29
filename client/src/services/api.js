@@ -65,22 +65,18 @@ async function request(path, options = {}, retry = true) {
   });
 
   if (response.status === 401 && retry && getRefreshToken()) {
-    try {
-      const newToken = await refreshAccessToken();
-      return request(
-        path,
-        {
-          ...options,
-          headers: {
-            ...headers,
-            Authorization: `Bearer ${newToken}`,
-          },
+    const newToken = await refreshAccessToken();
+    return request(
+      path,
+      {
+        ...options,
+        headers: {
+          ...headers,
+          Authorization: `Bearer ${newToken}`,
         },
-        false,
-      );
-    } catch (error) {
-      throw error;
-    }
+      },
+      false,
+    );
   }
 
   return parseResponse(response);

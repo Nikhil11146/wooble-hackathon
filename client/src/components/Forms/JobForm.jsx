@@ -17,6 +17,10 @@ const defaultForm = {
   requiredSkills: "",
 };
 
+function isObjectId(value) {
+  return /^[a-f\d]{24}$/i.test(value);
+}
+
 export default function JobForm({ initialValue = {}, onSubmit, submitting = false }) {
   const [form, setForm] = useState({
     ...defaultForm,
@@ -31,7 +35,7 @@ export default function JobForm({ initialValue = {}, onSubmit, submitting = fals
     numberOfPositions: initialValue.numberOfPositions ?? 1,
     startDate: initialValue.startDate ? initialValue.startDate.slice(0, 10) : "",
     requiredSkills: (initialValue.requiredSkills || [])
-      .map((skill) => (typeof skill === "string" ? skill : skill.name))
+      .map((skill) => (typeof skill === "string" ? skill : skill._id || skill.name))
       .filter(Boolean)
       .join(", "),
   });
@@ -59,7 +63,7 @@ export default function JobForm({ initialValue = {}, onSubmit, submitting = fals
       requiredSkills: form.requiredSkills
         .split(",")
         .map((skill) => skill.trim())
-        .filter(Boolean),
+        .filter(isObjectId),
     });
   };
 
@@ -78,17 +82,17 @@ export default function JobForm({ initialValue = {}, onSubmit, submitting = fals
       </label>
 
       <Input
-        label="Required skills"
+        label="Skill references"
         value={form.requiredSkills}
         onChange={set("requiredSkills")}
-        placeholder="Electrical, Safety, Wiring"
+        placeholder="Optional skill ids"
       />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Minimum experience (years)" type="number" min="0" value={form.minExperience} onChange={set("minExperience")} />
         <Input label="Maximum experience (years)" type="number" min="0" value={form.maxExperience} onChange={set("maxExperience")} />
-        <Input label="Minimum salary (₹)" type="number" min="0" value={form.salaryMin} onChange={set("salaryMin")} />
-        <Input label="Maximum salary (₹)" type="number" min="0" value={form.salaryMax} onChange={set("salaryMax")} />
+        <Input label="Minimum salary (Rs)" type="number" min="0" value={form.salaryMin} onChange={set("salaryMin")} />
+        <Input label="Maximum salary (Rs)" type="number" min="0" value={form.salaryMax} onChange={set("salaryMax")} />
         <Input label="Positions" type="number" min="1" value={form.numberOfPositions} onChange={set("numberOfPositions")} />
         <Input label="Start date" type="date" value={form.startDate} onChange={set("startDate")} />
       </div>

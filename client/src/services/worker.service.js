@@ -83,8 +83,8 @@ export async function getJobById(jobId) {
   return response.data;
 }
 
-export async function applyToJob(jobId) {
-  const response = await api.post("/applications", { jobId });
+export async function applyToJob(jobId, workerId) {
+  const response = await api.post("/applications", { jobId, workerId });
   return response.data;
 }
 

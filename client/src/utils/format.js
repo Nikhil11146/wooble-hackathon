@@ -1,8 +1,8 @@
 export function formatSalary(salary) {
   if (!salary?.min && !salary?.max) return "Salary not listed";
   const fmt = (value) => Number(value).toLocaleString("en-IN");
-  const currency = salary.currency === "INR" || !salary.currency ? "₹" : `${salary.currency} `;
-  if (salary.min && salary.max) return `${currency}${fmt(salary.min)} – ${currency}${fmt(salary.max)}`;
+  const currency = salary.currency === "INR" || !salary.currency ? "Rs " : `${salary.currency} `;
+  if (salary.min && salary.max) return `${currency}${fmt(salary.min)} - ${currency}${fmt(salary.max)}`;
   if (salary.min) return `From ${currency}${fmt(salary.min)}`;
   return `Up to ${currency}${fmt(salary.max)}`;
 }
@@ -21,6 +21,20 @@ export function formatEmploymentType(type) {
 export function formatRating(rating) {
   if (rating == null) return null;
   return `${Number(rating).toFixed(1)}/5`;
+}
+
+export function formatDate(value) {
+  if (!value) return "Not set";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Not set";
+  return new Intl.DateTimeFormat("en-IN", { dateStyle: "medium" }).format(date);
+}
+
+export function formatStatus(value) {
+  return String(value || "")
+    .replaceAll("_", " ")
+    .toLowerCase()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 export function trustScoreColour(score) {

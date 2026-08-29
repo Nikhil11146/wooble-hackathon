@@ -52,8 +52,13 @@ export default function useLocation(options = DEFAULT_OPTIONS) {
 
   useEffect(() => {
     if (options.auto !== true) return undefined;
-    requestLocation().catch(() => undefined);
-    return undefined;
+    let active = true;
+    queueMicrotask(() => {
+      if (active) requestLocation().catch(() => undefined);
+    });
+    return () => {
+      active = false;
+    };
   }, [options.auto, requestLocation]);
 
   return {
