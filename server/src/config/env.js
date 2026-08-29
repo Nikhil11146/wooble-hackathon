@@ -9,4 +9,5 @@ export const ENV = {
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET || "kaushalsetu_super_refresh_jwt_key_2026",
   REFRESH_TOKEN_EXPIRES_IN: process.env.REFRESH_TOKEN_EXPIRES_IN || "30d",
   NODE_ENV: process.env.NODE_ENV || "development",
+  CORS_ORIGIN: process.env.CORS_ORIGIN || "http://localhost:5173",
 };

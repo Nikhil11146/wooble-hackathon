@@ -1,39 +1,48 @@
 import cors from "cors";
 import express from "express";
-import mongoose from "mongoose";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { API_PREFIX, APP_NAME, DATABASE_STATES, REQUEST_BODY_LIMIT } from "./config/constants.js";
+import { connectDatabase, getDatabaseState } from "./config/database.js";
 import { ENV } from "./config/env.js";
 import { errorHandler, notFound } from "./middleware/error.middleware.js";
 import apiRoutes from "./routes/index.js";
 
 const app = express();
+const allowedOrigins = ENV.CORS_ORIGIN.split(",").map((origin) => origin.trim()).filter(Boolean);
 
-app.use(cors());
-app.use(express.json({ limit: "1mb" }));
-app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+app.disable("x-powered-by");
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes("*") || allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("Origin is not allowed by CORS."));
+  },
+  credentials: true,
+}));
+app.use(express.json({ limit: REQUEST_BODY_LIMIT }));
+app.use(express.urlencoded({ extended: true, limit: REQUEST_BODY_LIMIT }));
 
 app.get("/", (_req, res) => {
   res.status(200).json({
     success: true,
-    message: "KaushalSetu API is running.",
+    message: `${APP_NAME} is running.`,
   });
 });
 
 app.get("/health", (_req, res) => {
   res.status(200).json({
     success: true,
-    database: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    database: DATABASE_STATES[getDatabaseState()] || "unknown",
   });
 });
 
-app.use("/api", apiRoutes);
+app.use(API_PREFIX, apiRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
 export const startServer = async () => {
   try {
-    await mongoose.connect(ENV.MONGODB_URI);
+    await connectDatabase();
     console.log("Database connected.");
 
     return app.listen(ENV.PORT, () => {
