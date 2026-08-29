@@ -9,6 +9,8 @@ function currentSocket() {
     socket = io(SOCKET_URL, {
       autoConnect: false,
       transports: ["websocket", "polling"],
+      // Auth is re-read on every (re)connect so a refreshed token always works.
+      auth: (callback) => callback({ token: getToken() }),
     });
     socket.on("connect_error", (error) => {
       console.warn("Socket connection error:", error.message);
@@ -18,10 +20,7 @@ function currentSocket() {
 }
 
 export function connectSocket() {
-  const target = currentSocket();
-  target.auth = { token: getToken() };
-  target.connect();
-  return target;
+  return currentSocket().connect();
 }
 
 export function disconnectSocket() {
@@ -30,7 +29,14 @@ export function disconnectSocket() {
 
 export function onSocketEvent(event, callback) {
   const target = currentSocket();
-  if (!target.connected) connectSocket();
+  if (!target.connected) target.connect();
   target.on(event, callback);
   return () => target.off(event, callback);
+}
+
+export function onSocketConnect(callback) {
+  const target = currentSocket();
+  if (!target.connected) target.connect();
+  target.on("connect", callback);
+  return () => target.off("connect", callback);
 }

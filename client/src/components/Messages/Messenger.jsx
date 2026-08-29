@@ -6,7 +6,7 @@ import { EmptyState, ErrorState, LoadingState } from "../Common/PageState";
 import useApi from "../../hooks/useApi";
 import useAuth from "../../hooks/useAuth";
 import { getConversations, getMessages, markThreadRead, searchRecipients, sendMessage } from "../../services/message.service";
-import { onSocketEvent } from "../../services/socket.service";
+import { onSocketConnect, onSocketEvent } from "../../services/socket.service";
 import { asList, userIdOf } from "../../utils/apiData";
 import { formatDate } from "../../utils/format";
 
@@ -75,31 +75,45 @@ export default function Messenger() {
   const messageItems = asList(thread.data);
   const refetchConversations = conversations.refetch;
   const refetchThread = thread.refetch;
+  const activeIdRef = useRef(activeId);
+  activeIdRef.current = activeId;
 
   // Live updates: a new message from the other side, or one of our own
   // messages being read, should refresh the list and the open thread.
+  // Listeners stay attached across conversation switches (the active thread
+  // is tracked via a ref) so an inbound event is never dropped mid-switch.
   useEffect(() => {
     if (!isAuthenticated) return undefined;
 
     const offNewMessage = onSocketEvent("message:new", (message) => {
       refetchConversations();
-      if (activeId && [String(message?.senderId), String(message?.recipientId)].includes(String(activeId))) {
+      const current = activeIdRef.current;
+      if (current && [String(message?.senderId), String(message?.recipientId)].includes(String(current))) {
         refetchThread();
       }
     });
 
     const offRead = onSocketEvent("message:read", (payload) => {
       refetchConversations();
-      if (activeId && String(payload?.threadId) === String(activeId)) {
+      const current = activeIdRef.current;
+      if (current && String(payload?.threadId) === String(current)) {
         refetchThread();
       }
+    });
+
+    // Whenever the socket (re)connects, pull the latest state instead of
+    // waiting for the next event (covers missed events and reconnects).
+    const offConnect = onSocketConnect(() => {
+      refetchConversations();
+      if (activeIdRef.current) refetchThread();
     });
 
     return () => {
       offNewMessage();
       offRead();
+      offConnect();
     };
-  }, [isAuthenticated, activeId, refetchConversations, refetchThread]);
+  }, [isAuthenticated, refetchConversations, refetchThread]);
 
   useEffect(() => {
     const node = scrollRef.current;
@@ -162,7 +176,7 @@ export default function Messenger() {
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      submitMessage(event.currentTarget.closest("form"));
+      event.currentTarget.form?.requestSubmit();
     }
   };
 
@@ -258,7 +272,7 @@ export default function Messenger() {
             {thread.loading && <div className="p-6"><LoadingState label="Loading messages..." /></div>}
             {thread.error && <div className="p-6"><ErrorState error={thread.error} onRetry={thread.refetch} /></div>}
             {!thread.loading && !thread.error && (
-              <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto p-4">
+              <div ref={scrollRef} className="no-scrollbar flex-1 space-y-3 overflow-y-auto p-4">
                 {messageItems.length === 0 ? (
                   <div className="py-8">
                     <EmptyState title="No messages yet" message="Send the first message below." />

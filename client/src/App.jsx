@@ -4,6 +4,7 @@ import Header from "./components/Layout/Header";
 import Sidebar from "./components/Layout/Sidebar";
 import Footer from "./components/Layout/Footer";
 import Button from "./components/Common/Button";
+import ServerWakeToast from "./components/Common/ServerWakeToast";
 import { AuthProvider } from "./hooks/AuthProvider";
 import useAuth from "./hooks/useAuth";
 import Landing from "./pages/Landing";
@@ -162,6 +163,7 @@ function ClientApp() {
 export default function App() {
   return (
     <AuthProvider>
+      <ServerWakeToast />
       <ClientApp />
     </AuthProvider>
   );
