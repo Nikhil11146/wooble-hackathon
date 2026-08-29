@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../Common/Button";
+import Input from "../Common/Input";
+import Modal from "../Common/Modal";
 import { EmptyState, ErrorState, LoadingState } from "../Common/PageState";
 import useApi from "../../hooks/useApi";
 import useAuth from "../../hooks/useAuth";
-import { getConversations, getMessages, markThreadRead, sendMessage } from "../../services/message.service";
+import { getConversations, getMessages, markThreadRead, searchRecipients, sendMessage } from "../../services/message.service";
 import { onSocketEvent } from "../../services/socket.service";
 import { asList, userIdOf } from "../../utils/apiData";
 import { formatDate } from "../../utils/format";
@@ -63,6 +65,12 @@ export default function Messenger() {
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState("");
 
+  const [composerOpen, setComposerOpen] = useState(false);
+  const [recipientQuery, setRecipientQuery] = useState("");
+  const [recipients, setRecipients] = useState([]);
+  const [recipientLoading, setRecipientLoading] = useState(false);
+  const [recipientError, setRecipientError] = useState("");
+
   const conversationItems = asList(conversations.data);
   const messageItems = asList(thread.data);
   const refetchConversations = conversations.refetch;
@@ -97,6 +105,34 @@ export default function Messenger() {
     const node = scrollRef.current;
     if (node) node.scrollTop = node.scrollHeight;
   }, [thread.data, thread.loading, activeId]);
+
+  useEffect(() => {
+    if (!composerOpen) return undefined;
+
+    const timer = setTimeout(() => {
+      setRecipientLoading(true);
+      setRecipientError("");
+      searchRecipients(recipientQuery)
+        .then((payload) => setRecipients(asList(payload)))
+        .catch((error) => setRecipientError(error.message || "Unable to find people to message."))
+        .finally(() => setRecipientLoading(false));
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [composerOpen, recipientQuery]);
+
+  const startConversation = (recipient) => {
+    const id = recipient?.id || recipient?._id;
+    setComposerOpen(false);
+    setRecipientQuery("");
+    setRecipients([]);
+    setActive({
+      id,
+      otherUser: { id, name: recipient.name, role: recipient.role },
+      job: null,
+      unreadCount: 0,
+    });
+  };
 
   const selectConversation = (conversation) => {
     setActive({ ...conversation, unreadCount: 0 });
@@ -133,8 +169,11 @@ export default function Messenger() {
   return (
     <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)] lg:items-start">
       <aside className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25">
-        <div className="border-b border-slate-100 p-4 dark:border-[#222d34]">
+        <div className="flex items-center justify-between gap-3 border-b border-slate-100 p-4 dark:border-[#222d34]">
           <h2 className="font-bold text-slate-950 dark:text-[#e9edef]">Conversations</h2>
+          <Button variant="secondary" className="min-h-9 px-3 text-sm" onClick={() => setComposerOpen(true)}>
+            New message
+          </Button>
         </div>
 
         {conversations.loading && <LoadingState label="Loading conversations..." />}
@@ -243,6 +282,48 @@ export default function Messenger() {
           </>
         )}
       </section>
+
+      <Modal open={composerOpen} title="Start a new conversation" onClose={() => setComposerOpen(false)}>
+        <Input
+          autoFocus
+          label="Find someone to message"
+          placeholder="Search by name"
+          value={recipientQuery}
+          onChange={(event) => setRecipientQuery(event.target.value)}
+          inputClassName="mb-4"
+        />
+
+        {recipientLoading && <LoadingState label="Searching..." />}
+        {recipientError && <ErrorState error={recipientError} />}
+        {!recipientLoading && !recipientError && (
+          <div className="max-h-72 divide-y divide-slate-100 overflow-y-auto rounded-lg border border-slate-200 dark:divide-[#22303a] dark:border-[#2a3942]">
+            {recipients.length === 0 ? (
+              <div className="p-4">
+                <EmptyState title="No one found" message="Try a different name, or ask the other person to contact you first." />
+              </div>
+            ) : (
+              recipients.map((recipient) => (
+                <button
+                  key={recipient.id || recipient._id}
+                  type="button"
+                  onClick={() => startConversation(recipient)}
+                  className="flex w-full items-center gap-3 p-4 text-left transition-colors hover:bg-slate-50 dark:hover:bg-[#2a3942]/60"
+                >
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                    {initialsOf(recipient.name)}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block truncate font-semibold text-slate-900 dark:text-[#e9edef]">{recipient.name}</span>
+                    <span className="block truncate text-xs text-slate-500 dark:text-[#8696a0]">
+                      {recipient.role === "EMPLOYER" ? "Employer" : recipient.role === "WORKER" ? "Worker" : recipient.role}
+                    </span>
+                  </span>
+                </button>
+              ))
+            )}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

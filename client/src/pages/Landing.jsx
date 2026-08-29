@@ -1,11 +1,44 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTypewriter } from "react-simple-typewriter";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 import heroBg from "../assets/bg1.avif";
 import heroImage from "../assets/heroimage.jpg";
 import Button from "../components/Common/Button";
 import useAuth from "../hooks/useAuth";
 
 const GREEN = "#69d38b";
+
+function Reveal({ className = "", children }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return undefined;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className={`${className} reveal ${visible ? "is-visible" : ""}`}>
+      {children}
+    </div>
+  );
+}
 
 const portals = [
   {
@@ -58,7 +91,7 @@ function CheckMark() {
 
 function CheckItem({ children }) {
   return (
-    <li className="flex items-start gap-2.5 text-slate-700 transition-transform duration-200 hover:translate-x-2">
+    <li className="flex items-start gap-2.5 text-slate-700 transition-transform duration-200 hover:translate-x-2 dark:text-[#e9edef]">
       <CheckMark />
       <span className="text-sm sm:text-base">{children}</span>
     </li>
@@ -68,21 +101,21 @@ function CheckItem({ children }) {
 function SectionHeading({ eyebrow, title, description, light = false }) {
   return (
     <div className="mx-auto max-w-2xl text-center">
-      {eyebrow && <p className={`text-xs font-bold uppercase tracking-[0.2em] text-[#2b84ea] ${light ? "text-[#00a884]" : ""}`}>{eyebrow}</p>}
-      <h2 className={`mt-3 text-2xl font-bold sm:text-3xl ${light ? "text-white" : "text-slate-950"}`}>{title}</h2>
+      {eyebrow && <p className={`text-xs font-bold uppercase tracking-[0.2em] text-[#2b84ea] ${light ? "text-[#00a884]" : "dark:text-[#00a884]"}`}>{eyebrow}</p>}
+      <h2 className={`mt-3 text-2xl font-bold sm:text-3xl ${light ? "text-white" : "text-slate-950 dark:text-[#e9edef]"}`}>{title}</h2>
       <span aria-hidden="true" className="mx-auto mt-4 block h-1 w-6 rounded bg-[#69d38b]" />
-      {description && <p className={`mt-4 text-sm ${light ? "text-[#aebac1]" : "text-slate-600"}`}>{description}</p>}
+      {description && <p className={`mt-4 text-sm ${light ? "text-[#aebac1]" : "text-slate-600 dark:text-[#aebac1]"}`}>{description}</p>}
     </div>
   );
 }
 
 function PortalCard({ portal, onNavigate }) {
   return (
-    <article className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-[4px_4px_0_#c4ddf9] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[4px_6px_0_#9cc6f5]">
-      <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-xl bg-[#e7f1fd] text-lg font-black text-[#2b84ea]">
+    <article className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 shadow-[4px_4px_0_#c4ddf9] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[4px_6px_0_#9cc6f5] dark:border-[#2a3942] dark:bg-[#202c33] dark:shadow-[4px_4px_0_rgba(0,168,132,0.4)] dark:hover:shadow-[4px_6px_0_rgba(0,168,132,0.6)]">
+      <span aria-hidden="true" className="grid h-11 w-11 place-items-center rounded-xl bg-[#e7f1fd] text-lg font-black text-[#2b84ea] dark:bg-[#2a3942] dark:text-[#00a884]">
         {portal.title[0]}
       </span>
-      <h3 className="mt-4 text-xl font-bold text-slate-950">{portal.title}</h3>
+      <h3 className="mt-4 text-xl font-bold text-slate-950 dark:text-[#e9edef]">{portal.title}</h3>
       <ul className="mt-4 space-y-2.5">
         {portal.points.map((point) => (
           <CheckItem key={point}>{point}</CheckItem>
@@ -92,7 +125,7 @@ function PortalCard({ portal, onNavigate }) {
         <Button variant="ghost" className="justify-start px-0 font-bold" onClick={() => onNavigate?.("/login")}>
           Try the demo →
         </Button>
-        <p className="text-xs font-semibold text-slate-400">{portal.email}</p>
+        <p className="text-xs font-semibold text-slate-400 dark:text-[#8696a0]">{portal.email}</p>
       </div>
     </article>
   );
@@ -100,17 +133,17 @@ function PortalCard({ portal, onNavigate }) {
 
 function MockJobCard() {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[4px_4px_0_#c4ddf9]">
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[4px_4px_0_#c4ddf9] dark:border-[#2a3942] dark:bg-[#202c33] dark:shadow-[4px_4px_0_rgba(0,168,132,0.4)]">
       <div className="flex items-center justify-between gap-3">
-        <p className="text-xs font-bold uppercase tracking-wider text-[#2b84ea]">Recommended job</p>
-        <span className="rounded-full bg-[#e9f8ef] px-2.5 py-1 text-xs font-bold text-[#1f9d55]">
+        <p className="text-xs font-bold uppercase tracking-wider text-[#2b84ea] dark:text-[#00a884]">Recommended job</p>
+        <span className="rounded-full bg-[#e9f8ef] px-2.5 py-1 text-xs font-bold text-[#1f9d55] dark:bg-[#005c4b] dark:text-[#25d366]">
           92% match
         </span>
       </div>
-      <h4 className="mt-3 text-lg font-bold text-slate-950">Industrial Electrician</h4>
-      <p className="mt-1 text-sm text-slate-500">BuildRight Contractors · 5 km away</p>
-      <p className="mt-1 text-sm font-semibold text-slate-700">Rs 25,000 - 35,000 / month</p>
-      <button type="button" className="mt-5 w-full cursor-pointer rounded-lg bg-[#2b84ea] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1f6fce]" onClick={(event) => event.preventDefault()}>
+      <h4 className="mt-3 text-lg font-bold text-slate-950 dark:text-[#e9edef]">Industrial Electrician</h4>
+      <p className="mt-1 text-sm text-slate-500 dark:text-[#8696a0]">BuildRight Contractors · 5 km away</p>
+      <p className="mt-1 text-sm font-semibold text-slate-700 dark:text-[#aebac1]">Rs 25,000 - 35,000 / month</p>
+      <button type="button" className="mt-5 w-full cursor-pointer rounded-lg bg-[#2b84ea] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#1f6fce] dark:bg-[#00a884] dark:hover:bg-[#06cf9c]" onClick={(event) => event.preventDefault()}>
         Apply now
       </button>
     </div>
@@ -136,7 +169,7 @@ function Typewriter({ words, className }) {
 
 function Spacer() {
   return (
-    <svg viewBox="0 0 1440 72" className="block h-10 w-full text-slate-50 sm:h-14" preserveAspectRatio="none" aria-hidden="true">
+    <svg viewBox="0 0 1440 72" className="block h-10 w-full text-slate-50 sm:h-14 dark:text-[#0b141a]" preserveAspectRatio="none" aria-hidden="true">
       <path fill="currentColor" d="M0 72V36c240 36 480 36 720 0s480-36 720 0v36z" />
     </svg>
   );
@@ -145,33 +178,6 @@ function Spacer() {
 export default function Landing({ onNavigate }) {
   const { user, profile, dashboardPath, isAuthenticated } = useAuth();
   const displayName = profile?.name || profile?.companyName || null;
-  const trackRef = useRef(null);
-
-  const scrollTrack = (direction) => {
-    const node = trackRef.current;
-    if (!node) return;
-    const card = node.querySelector("[data-testimonial]");
-    const step = card ? card.getBoundingClientRect().width + 16 : node.clientWidth * 0.8;
-    const total = testimonials.length * step;
-    const atStart = node.scrollLeft <= 1;
-    const atEnd = node.scrollLeft >= node.scrollWidth - node.clientWidth - 1;
-
-    if (direction > 0 && atEnd) {
-      node.style.transition = "none";
-      node.scrollLeft -= total;
-      void node.offsetWidth;
-      node.style.transition = "";
-      node.scrollBy({ left: direction * step, behavior: "smooth" });
-    } else if (direction < 0 && atStart) {
-      node.style.transition = "none";
-      node.scrollLeft += total;
-      void node.offsetWidth;
-      node.style.transition = "";
-      node.scrollBy({ left: direction * step, behavior: "smooth" });
-    } else {
-      node.scrollBy({ left: direction * step, behavior: "smooth" });
-    }
-  };
 
   return (
     <main>
@@ -235,32 +241,34 @@ export default function Landing({ onNavigate }) {
           </div>
 
           <div className="hidden lg:block">
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[6px_6px_0_rgba(46,132,234,0.9)]">
-              <img
-                src={heroImage}
-                alt="KaushalSetu platform preview"
-                className="h-52 w-full object-cover"
-                loading="eager"
-              />
-              <div className="p-6">
-                <p className="text-xs font-bold uppercase tracking-wider text-[#2b84ea]">Trust at a glance</p>
-                <dl className="mt-4 grid gap-5">
-                  {stats.map(([value, label]) => (
-                    <div key={label} className="flex items-baseline justify-between gap-4">
-                      <dt className="text-sm font-medium text-slate-500">{label}</dt>
-                      <dd className="text-xl font-black text-slate-950">{value}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <span aria-hidden="true" className="mt-5 block h-1 w-6 rounded bg-[#69d38b]" />
+            <Reveal>
+              <div className="animate-float overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[6px_6px_0_rgba(46,132,234,0.9)] dark:border-[#2a3942] dark:bg-[#202c33] dark:shadow-[6px_6px_0_rgba(0,168,132,0.6)]">
+                <img
+                  src={heroImage}
+                  alt="KaushalSetu platform preview"
+                  className="h-52 w-full object-cover"
+                  loading="eager"
+                />
+                <div className="p-6">
+                  <p className="text-xs font-bold uppercase tracking-wider text-[#2b84ea] dark:text-[#00a884]">Trust at a glance</p>
+                  <dl className="mt-4 grid gap-5">
+                    {stats.map(([value, label]) => (
+                      <div key={label} className="flex items-baseline justify-between gap-4">
+                        <dt className="text-sm font-medium text-slate-500 dark:text-[#aebac1]">{label}</dt>
+                        <dd className="text-xl font-black text-slate-950 dark:text-[#e9edef]">{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <span aria-hidden="true" className="mt-5 block h-1 w-6 rounded bg-[#69d38b]" />
+                </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
         <Spacer />
       </section>
 
-      <section className="bg-slate-50 py-16">
+      <section className="bg-slate-50 py-16 dark:bg-[#0b141a]">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="One platform, three portals"
@@ -273,12 +281,12 @@ export default function Landing({ onNavigate }) {
             ))}
           </div>
 
-          <div className="mt-14 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[4px_4px_0_#c4ddf9]">
+          <div className="mt-14 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[4px_4px_0_#c4ddf9] dark:border-[#2a3942] dark:bg-[#202c33] dark:shadow-[4px_4px_0_rgba(0,168,132,0.4)]">
             <div className="grid gap-8 p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-center lg:p-12">
               <div>
-                <h3 className="text-2xl font-bold text-slate-950 sm:text-3xl">
+                <h3 className="text-2xl font-bold text-slate-950 sm:text-3xl dark:text-[#e9edef]">
                   The all-powerful{" "}
-                  <span className="text-[#2b84ea]">job matching</span>
+                  <span className="text-[#2b84ea] dark:text-[#00a884]">job matching</span>
                 </h3>
                 <ul className="mt-8 space-y-3">
                   <CheckItem>Smart match scoring against every open job</CheckItem>
@@ -316,7 +324,7 @@ export default function Landing({ onNavigate }) {
         </div>
       </section>
 
-      <section className="bg-slate-50 py-16">
+      <section className="dark:bg-[#0b141a] bg-slate-50 py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Testimonials"
@@ -324,44 +332,57 @@ export default function Landing({ onNavigate }) {
             description="Real stories from the people who hire and get hired on KaushalSetu."
           />
           <div className="relative mt-12">
-            <div ref={trackRef} className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scroll-smooth">
-              {[...testimonials, ...testimonials].map((item, idx) => (
-                <article
-                  key={`${item.name}-${idx}`}
-                  data-testimonial
-                  className="w-[85%] shrink-0 snap-start rounded-2xl border border-slate-200 bg-white p-6 shadow-[4px_4px_0_#c4ddf9] transition-all duration-300 ease-out hover:-translate-y-2 hover:scale-[1.03] hover:shadow-[8px_10px_0_#c4ddf9] sm:w-[55%] lg:w-[calc(33.333%-0.75rem)]"
-                >
-                  <div aria-label={`${item.rating} out of 5 stars`} className="text-sm text-amber-400">
-                    {"★".repeat(item.rating)}
-                    {"☆".repeat(5 - item.rating)}
-                  </div>
-                  <p className="mt-4 text-sm leading-relaxed text-slate-700">“{item.quote}”</p>
-                  <div className="mt-5 flex items-center gap-3">
-                    <span aria-hidden="true" className="grid h-10 w-10 place-items-center rounded-full bg-[#2b84ea] text-sm font-bold text-white">
-                      {item.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}
-                    </span>
-                    <div>
-                      <p className="text-sm font-bold text-slate-950">{item.name}</p>
-                      <p className="text-xs text-slate-500">{item.role}</p>
+            <Swiper
+              modules={[Navigation, Autoplay]}
+              loop
+              slidesPerView={1}
+              spaceBetween={16}
+              centeredSlides
+              grabCursor
+              autoplay={{ delay: 4000, disableOnInteraction: false }}
+              navigation={{
+                nextEl: ".testimonial-next",
+                prevEl: ".testimonial-prev",
+              }}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+              }}
+              className="testimonial-swiper py-4 px-2"
+            >
+              {testimonials.map((item) => (
+                <SwiperSlide key={item.name} className="!h-auto my-2 mr-2">
+                  <article className="flex h-full flex-col overflow-visible rounded-2xl border border-slate-200 bg-white p-6 shadow-[4px_4px_0_#c4ddf9] transition-transform duration-300 ease-out hover:-translate-y-2 dark:border-[#2a3942] dark:bg-[#202c33] dark:shadow-[4px_4px_0_rgba(0,168,132,0.4)]">
+                    <div aria-label={`${item.rating} out of 5 stars`} className="text-sm text-amber-400">
+                      {"★".repeat(item.rating)}
+                      {"☆".repeat(5 - item.rating)}
                     </div>
-                  </div>
-                </article>
+                    <p className="mt-4 flex-1 text-sm leading-relaxed text-slate-700 dark:text-[#e9edef]">“{item.quote}”</p>
+                    <div className="mt-5 flex items-center gap-3">
+                      <span aria-hidden="true" className="grid h-10 w-10 place-items-center rounded-full bg-[#2b84ea] text-sm font-bold text-white dark:bg-[#00a884]">
+                        {item.name.split(" ").map((part) => part[0]).slice(0, 2).join("")}
+                      </span>
+                      <div>
+                        <p className="text-sm font-bold text-slate-950 dark:text-[#e9edef]">{item.name}</p>
+                        <p className="text-xs text-slate-500 dark:text-[#8696a0]">{item.role}</p>
+                      </div>
+                    </div>
+                  </article>
+                </SwiperSlide>
               ))}
-            </div>
+            </Swiper>
             <div className="mt-6 flex items-center justify-center gap-3">
               <button
                 type="button"
                 aria-label="Previous testimonials"
-                onClick={() => scrollTrack(-1)}
-                className="grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-slate-300 bg-white text-[#2b84ea] transition-colors hover:bg-[#e7f1fd]"
+                className="testimonial-prev grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-slate-300 bg-white text-[#2b84ea] transition-colors hover:bg-[#e7f1fd] dark:border-[#2a3942] dark:bg-[#202c33] dark:text-[#00a884] dark:hover:bg-[#2a3942]"
               >
                 ←
               </button>
               <button
                 type="button"
                 aria-label="Next testimonials"
-                onClick={() => scrollTrack(1)}
-                className="grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-slate-300 bg-white text-[#2b84ea] transition-colors hover:bg-[#e7f1fd]"
+                className="testimonial-next grid h-10 w-10 cursor-pointer place-items-center rounded-full border border-slate-300 bg-white text-[#2b84ea] transition-colors hover:bg-[#e7f1fd] dark:border-[#2a3942] dark:bg-[#202c33] dark:text-[#00a884] dark:hover:bg-[#2a3942]"
               >
                 →
               </button>

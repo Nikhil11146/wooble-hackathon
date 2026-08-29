@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Button from "../../components/Common/Button";
-import { ErrorState, LoadingState, Notice, PageHeader, StatCard } from "../../components/Common/PageState";
+import Input from "../../components/Common/Input";
+import { EmptyState, ErrorState, LoadingState, Notice, PageHeader, StatCard } from "../../components/Common/PageState";
 import useApi from "../../hooks/useApi";
 import { getAllUsers, getPlatformAnalytics, updateUserStatus } from "../../services/admin.service";
 import { asList } from "../../utils/apiData";
@@ -18,8 +19,19 @@ export default function AdminDashboard() {
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [updatingId, setUpdatingId] = useState("");
+  const [query, setQuery] = useState("");
   const data = analytics.data || {};
   const userList = asList(users.data);
+
+  const filteredUsers = useMemo(() => {
+    const term = query.trim().toLowerCase();
+    if (!term) return userList;
+    return userList.filter((user) =>
+      [user.email, user.role, user.verified ? "verified" : "unverified"]
+        .filter(Boolean)
+        .some((field) => String(field).toLowerCase().includes(term)),
+    );
+  }, [query, userList]);
 
   const toggleUser = async (user) => {
     setUpdatingId(user._id || user.id);
@@ -60,8 +72,17 @@ export default function AdminDashboard() {
       )}
 
       <section className="mt-6 rounded-lg border border-slate-200 bg-white shadow-sm dark:border-[#222d34] dark:bg-[#202c33] dark:shadow-black/25 dark:backdrop-blur">
-        <header className="border-b border-slate-100 p-4 dark:border-[#222d34]">
+        <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-4 dark:border-[#222d34]">
           <h2 className="text-xl font-bold tracking-tight text-slate-950 dark:text-[#e9edef]">Users</h2>
+          <Input
+            type="search"
+            placeholder="Search by email or role..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            className="w-full sm:w-72"
+            inputClassName="min-h-10"
+            aria-label="Search users"
+          />
         </header>
         <div className="grid gap-3 p-4">
           {notice && <Notice type="success">{notice}</Notice>}
@@ -69,7 +90,12 @@ export default function AdminDashboard() {
         </div>
         {users.loading && <div className="p-4"><LoadingState label="Loading users..." /></div>}
         {users.error && <div className="p-4"><ErrorState error={users.error} onRetry={users.refetch} /></div>}
-        {!users.loading && !users.error && (
+        {!users.loading && !users.error && filteredUsers.length === 0 && (
+          <div className="p-4">
+            <EmptyState title="No matching users" message="Try a different email or role." />
+          </div>
+        )}
+        {!users.loading && !users.error && filteredUsers.length > 0 && (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-200 text-left text-sm dark:divide-slate-700">
               <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:bg-[#2a3942] dark:text-[#8696a0]">
@@ -82,7 +108,7 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                {userList.map((user) => {
+                {filteredUsers.map((user) => {
                   const id = user._id || user.id;
                   return (
                     <tr key={id}>
