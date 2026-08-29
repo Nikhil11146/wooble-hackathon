@@ -6,6 +6,7 @@ import { API_PREFIX, APP_NAME, DATABASE_STATES, REQUEST_BODY_LIMIT } from "./con
 import { connectDatabase, getDatabaseState } from "./config/database.js";
 import { ENV } from "./config/env.js";
 import { errorHandler, notFound } from "./middleware/error.middleware.js";
+import { requestLogger } from "./middleware/requestLogger.middleware.js";
 import apiRoutes from "./routes/index.js";
 
 const app = express();
@@ -21,6 +22,7 @@ app.use(cors({
 }));
 app.use(express.json({ limit: REQUEST_BODY_LIMIT }));
 app.use(express.urlencoded({ extended: true, limit: REQUEST_BODY_LIMIT }));
+app.use(requestLogger);
 
 app.get("/", (_req, res) => {
   res.status(200).json({
