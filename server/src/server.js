@@ -33,7 +33,7 @@ app.get("/", (_req, res) => {
 });
 
 app.get("/health", (_req, res) => {
-  res.status(200).json({
+  res.status(200).json({  
     success: true,
     database: DATABASE_STATES[getDatabaseState()] || "unknown",
   });
