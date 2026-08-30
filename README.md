@@ -6,6 +6,8 @@ A full-stack recruitment platform for India's blue-collar workforce. Connect ski
 
 https://kaushalsetu-wooble.netlify.app/
 
+[▶️ Watch Demo](https://youtu.be/1K4aDsawp_k)
+
 ## Table of Contents
 
 1. [Overview](#overview)
