@@ -337,7 +337,7 @@ export const searchJobs = async (req, res) => {
     if (minSalary) filter["salary.min"] = { $gte: Number(minSalary) };
     if (maxSalary) filter["salary.max"] = { $lte: Number(maxSalary) };
 
-    const jobs = await Job.find(filter).sort({ createdAt: -1 });
+    const jobs = await Job.find(filter).populate("requiredSkills", "name").sort({ createdAt: -1 });
     return res.status(200).json({ success: true, data: jobs });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
@@ -347,7 +347,7 @@ export const searchJobs = async (req, res) => {
 // GET /api/jobs/:id
 export const getJobById = async (req, res) => {
   try {
-    const job = await Job.findById(req.params.id);
+    const job = await Job.findById(req.params.id).populate("requiredSkills", "name");
     if (!job) {
       return res.status(404).json({ success: false, message: "Job not found." });
     }
